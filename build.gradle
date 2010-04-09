@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+defaultTasks 'classes'
+
+repositories {
+    mavenCentral()
+    mavenRepo name: "jboss", urls: "http://repository.jboss.org/maven2/"
+}
+
+dependencies {
+    slf4jVersion = '1.5.8'
+    commonsExecVersion = '1.0.1'
+    doctypeChangerVersion = '1.1'
+    xmlResolverVersion = '1.1'
+    xercesVersion = '2.8.0'
+    plexusUtilsVersion = '2.0.3'
+    junitVersion = '3.8.2'
+
+    compile(
+            [group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion],
+            [group: 'org.apache.commons', name: 'commons-exec', version: commonsExecVersion],
+            [group: 'net.socialchange.doctype', name: 'doctype-changer', version: doctypeChangerVersion],
+            [group: 'xml-resolver', name: 'xml-resolver', version: xmlResolverVersion],
+            [group: 'xerces', name: 'xercesImpl', version: xercesVersion],
+            [group: 'org.codehaus.plexus', name: 'plexus-utils', version: plexusUtilsVersion]
+    )
+    testCompile(
+            [group: 'junit', name: 'junit', version: junitVersion],
+            [group: 'org.slf4j', name: 'jcl-over-slf4j', version: slf4jVersion],
+            [group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion]
+    )
+}
