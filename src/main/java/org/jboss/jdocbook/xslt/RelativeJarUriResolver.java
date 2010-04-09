@@ -21,24 +21,41 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook.xslt;
 
-
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import java.net.URL;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamSource;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * Responsible for resolving relative references from jar base urls.
  *
  * @author Steve Ebersole
  */
-public interface Translator {
+public class RelativeJarUriResolver implements URIResolver {
 	/**
-	 * Performs a translation.
-	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
+	 * {@inheritDoc}
 	 */
-	public void translate(TranslationSource translationSource);
+	public Source resolve(String href, String base) throws TransformerException {
+		// href need to be relative
+		if ( href.indexOf( "://" ) > 0 || href.startsWith( "/" ) ) {
+			return null;
+		}
+
+		// base would need to start with jar:
+		if ( !base.startsWith( "jar:" ) ) {
+			return null;
+		}
+
+		String fullHref = base.substring( 4, base.lastIndexOf( '/' ) + 1 ) + href;
+		try {
+			URL url = new URL( fullHref );
+			return new StreamSource( url.openStream(), url.toExternalForm() );
+		}
+		catch ( Throwable t ) {
+			return null;
+		}
+	}
 }

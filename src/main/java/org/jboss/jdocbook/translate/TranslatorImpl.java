@@ -26,14 +26,16 @@ package org.jboss.jdocbook.translate;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Locale;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.jboss.jdocbook.Configuration;
+import org.jboss.jdocbook.JDocBookComponentFactory;
 import org.jboss.jdocbook.JDocBookProcessException;
 import org.jboss.jdocbook.MasterLanguageDescriptor;
+import org.jboss.jdocbook.TranslationSource;
 import org.jboss.jdocbook.util.FileUtils;
 import org.jboss.jdocbook.util.TranslationUtils;
 import org.slf4j.Logger;
@@ -47,28 +49,44 @@ import org.slf4j.LoggerFactory;
 public class TranslatorImpl implements Translator {
 	private static final Logger log = LoggerFactory.getLogger( TranslatorImpl.class );
 
-	public void translate(
-			MasterLanguageDescriptor masterDescriptor,
-			File basePoDirectory,
-			File targetDirectory) throws JDocBookProcessException {
-		for ( File file : masterDescriptor.getDocumentFiles() ) {
+	private JDocBookComponentFactory componentFactory;
+
+	public TranslatorImpl(JDocBookComponentFactory componentFactory) {
+		this.componentFactory = componentFactory;
+	}
+
+	protected MasterLanguageDescriptor master() {
+		return componentFactory.getEnvironment().getMasterLanguageDescriptor();
+	}
+
+	private Configuration configuration() {
+		return componentFactory.getConfiguration();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void translate(TranslationSource translationSource) {
+		log.debug( "Starting translation {}", render( translationSource.getLanguage() ) );
+
+		for ( File file : master().getDocumentFiles() ) {
 			// determine the proper relative work directory for the translated XML
-			String relativity = FileUtils.determineRelativity( file, masterDescriptor.getBaseSourceDirectory() );
+			String relativity = FileUtils.determineRelativity( file, master().getBaseSourceDirectory() );
 			File relativeWorkDir = (relativity == null)
-					? targetDirectory
-					: new File( targetDirectory, relativity );
+					? translationSource.resolveTranslatedXmlDirectory()
+					: new File( translationSource.resolveTranslatedXmlDirectory(), relativity );
 			File translatedFile = new File( relativeWorkDir, file.getName() );
 
 			// if the file to translate is not an XML file, simply copy it
 			if ( FileUtils.isXMLFile( file ) ) {
 				String poFileName = TranslationUtils.determinePoFileName( file );
 				File relativeTranslationDir = (relativity == null)
-						? basePoDirectory
-						: new File( basePoDirectory, relativity );
+						? translationSource.resolvePoDirectory()
+						: new File( translationSource.resolvePoDirectory(), relativity );
 				File poFile = new File( relativeTranslationDir, poFileName );
 				if ( !poFile.exists() ) {
 					throw new JDocBookProcessException(
-							"Unable to locate PO file for [" + file + "] in [" + basePoDirectory + "]"
+							"Unable to locate PO file for [" + file + "] in [" + translationSource.resolvePoDirectory() + "]"
 					);
 				}
 				generateTranslatedXML( file, poFile, translatedFile );
@@ -139,5 +157,9 @@ public class TranslatorImpl implements Translator {
 		catch ( IOException e  ) {
 			throw new JDocBookProcessException( "unable to open output stream for translated XML file [" + translatedFile + "]" );
 		}
+	}
+
+	private String render(Locale language) {
+		return TranslationUtils.render( language, configuration().getLocaleSeparator() );
 	}
 }

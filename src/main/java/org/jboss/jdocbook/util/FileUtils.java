@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
@@ -68,7 +69,7 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 	public static SAXSource createSAXSource(
 			File file,
 			EntityResolver resolver,
-			final List<ValueInjection> valueInjections) {
+			final Set<ValueInjection> valueInjections) {
 		try {
 			final InputSource source = createInputSource( file, valueInjections );
 
@@ -93,7 +94,7 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 
 	public static InputSource createInputSource(
 			File file,
-			final List<ValueInjection> valueInjections) throws SAXException {
+			final Set<ValueInjection> valueInjections) throws SAXException {
 		final boolean injectionsDefined = valueInjections != null && ! valueInjections.isEmpty();
 		try {
 			InputStream inputStream = new BufferedInputStream( new FileInputStream( file ) );
@@ -242,7 +243,7 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 		return path.getAbsolutePath();
 	}
 
-	private static void buildInjectedInternalEntitySubset(StringBuffer buffer, List<ValueInjection> valueInjections) {
+	private static void buildInjectedInternalEntitySubset(StringBuffer buffer, Set<ValueInjection> valueInjections) {
 		for ( ValueInjection injection : valueInjections ) {
 			buffer.append( "<!ENTITY " )
 					.append( injection.getName() )

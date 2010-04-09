@@ -21,24 +21,35 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook;
 
-
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import java.io.File;
+import java.util.Locale;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * TODO : javadoc
  *
  * @author Steve Ebersole
  */
-public interface Translator {
+public interface ProfilingSource {
 	/**
-	 * Performs a translation.
+	 * Retrieve the language for this source.
 	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
+	 * @return The language for this source.
 	 */
-	public void translate(TranslationSource translationSource);
+	public Locale getLanguage();
+
+	/**
+	 * Retrieve the DocBook XML document file  to be profiled.
+	 *
+	 * @return The DocBook XML document file.
+	 */
+	public File resolveDocumentFile();
+
+	/**
+	 * Retrieve the profiled document file.
+	 *
+	 * @return The profiled (generated) file.
+	 */
+	public File resolveProfiledDocumentFile();
 }

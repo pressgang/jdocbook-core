@@ -21,24 +21,36 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook.xslt;
 
+import java.util.Set;
 
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import org.apache.xml.resolver.CatalogManager;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * Basic support for our notion of CatalogManagers.
  *
  * @author Steve Ebersole
  */
-public interface Translator {
-	/**
-	 * Performs a translation.
-	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
-	 */
-	public void translate(TranslationSource translationSource);
+public abstract class AbstractCatalogManager extends CatalogManager {
+	public AbstractCatalogManager(Set<String> catalogNames) {
+		super();
+		setIgnoreMissingProperties( true );
+		if ( catalogNames != null && !catalogNames.isEmpty() ) {
+			StringBuffer buffer = new StringBuffer();
+			boolean first = true;
+			for ( String catalogName : catalogNames ) {
+				if ( catalogName != null ) {
+					if ( first ) {
+						first = false;
+					}
+					else {
+						buffer.append( ';' );
+					}
+					buffer.append( catalogName );
+				}
+			}
+			setCatalogFiles( buffer.toString() );
+		}
+	}
 }

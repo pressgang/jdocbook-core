@@ -21,24 +21,41 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook;
 
-
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import java.net.URL;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * TODO : javadoc
  *
  * @author Steve Ebersole
  */
-public interface Translator {
+public interface ResourceDelegate {
 	/**
-	 * Performs a translation.
+	 * Locate the requested resource, throwing an exception if it could not be found.  The name is expected
+	 * to have a scheme prefix.  Both 'classpath:' and 'file:' schemes are allowed here.
 	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
+	 * @param name The resource name.
+	 * @return The resource's URL.
+	 * @throws IllegalArgumentException If the resource could not be found.
 	 */
-	public void translate(TranslationSource translationSource);
+	public URL requireResource(String name);
+
+	/**
+	 * Locate the requested resource.  The name is expected to have a scheme prefix.  Both 'classpath:' and
+	 * 'file:' schemes are allowed here.
+	 *
+	 * @param name The resource name.
+	 * @return The resource's URL.
+	 */
+	public URL locateResource(String name);
+
+	/**
+	 * Look up a resource exclusively via classpath lookup.  The name should not have any scheme prefix, just the
+	 * resource name.
+	 *
+	 * @param name The resource name.
+	 * @return The resource's URL.
+	 */
+	public URL locateClassPathResource(String name);
 }

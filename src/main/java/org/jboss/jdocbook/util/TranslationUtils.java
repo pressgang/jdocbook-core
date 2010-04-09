@@ -24,6 +24,8 @@
 package org.jboss.jdocbook.util;
 
 import java.io.File;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  * Collection of utilities for dealing with i18n support, as defined by GNU gettext.
@@ -63,4 +65,36 @@ public class TranslationUtils {
 		return FileUtils.removeExtension( template.getName() ) + ".po";
 	}
 
+	public static Locale parse(String locale) {
+		return parse( locale, '-' );
+	}
+
+	public static Locale parse(String locale, char sep) {
+		StringTokenizer tokens = new StringTokenizer( locale, "" + sep );
+		int tokencount = tokens.countTokens();
+		switch ( tokencount ) {
+			case 3 :
+				return new Locale( tokens.nextToken(), tokens.nextToken(), tokens.nextToken() );
+			case 2 :
+				return new Locale( tokens.nextToken(), tokens.nextToken() );
+			case 1 :
+				return new Locale( tokens.nextToken() );
+			default:
+				return new Locale( "tbd" );
+		}
+	}
+
+	public static String render(Locale locale, char sep) {
+        boolean l = locale.getLanguage().length() != 0;
+        boolean c = locale.getCountry().length() != 0;
+        boolean v = locale.getVariant().length() != 0;
+        StringBuffer result = new StringBuffer( locale.getLanguage() );
+        if (c||(l&&v)) {
+            result.append( sep ).append( locale.getCountry() );
+        }
+        if (v&&(l||c)) {
+            result.append( sep ).append( locale.getVariant() );
+        }
+        return result.toString();
+	}
 }

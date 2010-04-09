@@ -13,6 +13,7 @@ dependencies {
     doctypeChangerVersion = '1.1'
     xmlResolverVersion = '1.1'
     xercesVersion = '2.8.0'
+    saxonVersion = '6.5.3'
     plexusUtilsVersion = '2.0.3'
     junitVersion = '3.8.2'
 
@@ -22,6 +23,7 @@ dependencies {
             [group: 'net.socialchange.doctype', name: 'doctype-changer', version: doctypeChangerVersion],
             [group: 'xml-resolver', name: 'xml-resolver', version: xmlResolverVersion],
             [group: 'xerces', name: 'xercesImpl', version: xercesVersion],
+            [group: 'saxon', name: 'saxon', version: saxonVersion],
             [group: 'org.codehaus.plexus', name: 'plexus-utils', version: plexusUtilsVersion]
     )
     testCompile(
@@ -30,3 +32,14 @@ dependencies {
             [group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion]
     )
 }
+
+group = 'org.jboss'
+version = '1.0.0-SNAPSHOT'
+
+manifest.mainAttributes(
+    provider: 'gradle',
+    'Implementation-Url': 'http://jboss.org',
+    'Implementation-Version': version,
+    'Implementation-Vendor': 'JBoss.org',
+    'Implementation-Vendor-Id': 'org.jboss'
+)

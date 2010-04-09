@@ -21,24 +21,23 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook.xslt;
 
-
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import org.jboss.jdocbook.JDocBookComponentFactory;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * Map hrefs starting with <tt>http://docbook.sourceforge.net/release/xsl/current/</tt>
+ * to classpath resource lookups.
  *
  * @author Steve Ebersole
  */
-public interface Translator {
+public class CurrentVersionResolver extends VersionResolver {
 	/**
-	 * Performs a translation.
+	 * Constructs a new CurrentVersionResolver instance.
 	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
+	 * @param componentFactory The execution environment
 	 */
-	public void translate(TranslationSource translationSource);
+	public CurrentVersionResolver(JDocBookComponentFactory componentFactory) {
+		super( componentFactory, "current" );
+	}
 }

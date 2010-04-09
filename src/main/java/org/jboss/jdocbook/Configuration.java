@@ -21,24 +21,37 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook;
 
-
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import java.util.Properties;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * TODO : javadoc
  *
  * @author Steve Ebersole
  */
-public interface Translator {
-	/**
-	 * Performs a translation.
-	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
-	 */
-	public void translate(TranslationSource translationSource);
+public interface Configuration {
+	public static final String DEFAULT_STANDARD_DATE_INJECTION_FORMAT = "yyyy-MM-dd";
+
+	public Properties getTransformerParameters();
+
+	public boolean isUseRelativeImageUris();
+
+	public char getLocaleSeparator();
+
+	public boolean isAutoDetectFontsEnabled();
+
+	public boolean isUseFopFontCacheEnabled();
+
+	public boolean isApplyStandardInjectionValuesEnabled();
+
+	public String getInjectionDateFormat();
+
+	public Set<ValueInjection> getValueInjections();
+
+	public SortedSet<String> getCatalogs();
+
+	public Profiling getProfiling();
 }

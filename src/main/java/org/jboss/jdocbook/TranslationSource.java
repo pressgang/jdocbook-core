@@ -21,24 +21,36 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook;
 
-
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import java.io.File;
+import java.util.Locale;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * Describes a source of translations
  *
  * @author Steve Ebersole
  */
-public interface Translator {
+public interface TranslationSource {
 	/**
-	 * Performs a translation.
+	 * Retrieve the translation language.
 	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
+	 * @return The translation language.
 	 */
-	public void translate(TranslationSource translationSource);
+	public Locale getLanguage();
+
+	/**
+	 * Retrieve the directory containing PO files for this translation.
+	 *
+	 * @return This translation's PO file directory.
+	 */
+	public File resolvePoDirectory();
+
+	/**
+	 * Retrieve the directory to which translated XML files should go (created by applying the PO files on top of the
+	 * master XML).
+	 *
+	 * @return This translation's XML directory.
+	 */
+	public File resolveTranslatedXmlDirectory();
 }

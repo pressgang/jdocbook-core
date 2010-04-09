@@ -21,24 +21,26 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
+package org.jboss.jdocbook.xslt;
 
+import java.net.URL;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.URIResolver;
 
-import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
+import org.apache.xml.resolver.tools.CatalogResolver;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * TODO : javadoc
  *
  * @author Steve Ebersole
  */
-public interface Translator {
-	/**
-	 * Performs a translation.
-	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
-	 */
-	public void translate(TranslationSource translationSource);
+public interface TransformerBuilder {
+
+	public CatalogResolver getCatalogResolver();
+
+	public Transformer buildStandardTransformer(URL xslt);
+
+	public Transformer buildStandardTransformer(String xsltResource);
+
+//	public Transformer buildTransformer(FormatPlan formatPlan, URL customStylesheet) throws XSLTException {
 }

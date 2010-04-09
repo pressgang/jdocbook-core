@@ -21,24 +21,24 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.translate;
-
+package org.jboss.jdocbook.xslt;
 
 import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * Indicates problems either building XSLT transformers or performing
+ * transformations.
  *
  * @author Steve Ebersole
  */
-public interface Translator {
-	/**
-	 * Performs a translation.
-	 *
-	 * @param translationSource Information regarding the translation
-	 *
-	 * @throws JDocBookProcessException Indicates a problem performing the translation
-	 */
-	public void translate(TranslationSource translationSource);
+public class XSLTException extends JDocBookProcessException {
+	private static final long serialVersionUID = -8042140232571503488L;
+
+	public XSLTException(String message) {
+		super( message );
+	}
+
+	public XSLTException(String message, Throwable cause) {
+		super( message, cause );
+	}
 }
