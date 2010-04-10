@@ -28,10 +28,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -69,7 +68,7 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 	public static SAXSource createSAXSource(
 			File file,
 			EntityResolver resolver,
-			final Set<ValueInjection> valueInjections) {
+			final LinkedHashSet<ValueInjection> valueInjections) {
 		try {
 			final InputSource source = createInputSource( file, valueInjections );
 
@@ -94,7 +93,7 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 
 	public static InputSource createInputSource(
 			File file,
-			final Set<ValueInjection> valueInjections) throws SAXException {
+			final LinkedHashSet<ValueInjection> valueInjections) throws SAXException {
 		final boolean injectionsDefined = valueInjections != null && ! valueInjections.isEmpty();
 		try {
 			InputStream inputStream = new BufferedInputStream( new FileInputStream( file ) );

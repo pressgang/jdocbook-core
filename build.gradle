@@ -1,11 +1,17 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 
 defaultTasks 'classes'
 
 repositories {
     mavenCentral()
     mavenRepo name: "jboss", urls: "http://repository.jboss.org/maven2/"
+    mavenRepo urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
 }
+
+//configurations {
+//    deployerJars
+//}
 
 dependencies {
     slf4jVersion = '1.5.8'
@@ -31,9 +37,10 @@ dependencies {
             [group: 'org.slf4j', name: 'jcl-over-slf4j', version: slf4jVersion],
             [group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion]
     )
+//    deployerJars "org.apache.maven.wagon:wagon-webdav:1.0-beta-2"
 }
 
-group = 'org.jboss'
+group = 'org.jboss.jdocbook'
 version = '1.0.0-SNAPSHOT'
 
 manifest.mainAttributes(
@@ -43,3 +50,13 @@ manifest.mainAttributes(
     'Implementation-Vendor': 'JBoss.org',
     'Implementation-Vendor-Id': 'org.jboss'
 )
+//
+//uploadArchives {
+//    repositories.mavenDeployer {
+//        name = 'jbossDeployer'
+//        configuration = configurations.deployerJars
+//        snapshotRepository(url: "dav:https://snapshots.jboss.org/maven2") {
+//            authentication(userName: , password: "myPassword")
+//        }
+//    }
+//}

@@ -210,7 +210,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		}
 	}
 
-	private static class NoOpWriter extends Writer {
+	public static class NoOpWriter extends Writer {
 		public void write(char[] buffer, int off, int len) {
 		}
 

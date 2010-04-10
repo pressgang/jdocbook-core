@@ -26,7 +26,7 @@ package org.jboss.jdocbook.xslt;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.jboss.jdocbook.JDocBookComponentFactory;
 import org.jboss.jdocbook.ValueInjection;
@@ -51,7 +51,7 @@ public class XIncludeEntityResolver implements EntityResolver {
 		this.componentFactory = componentFactory;
 	}
 
-	protected Set<ValueInjection> getValueInjections() {
+	protected LinkedHashSet<ValueInjection> getValueInjections() {
 		return componentFactory.getConfiguration().getValueInjections();
 	}
 

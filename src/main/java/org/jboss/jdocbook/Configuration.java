@@ -23,9 +23,8 @@
  */
 package org.jboss.jdocbook;
 
+import java.util.LinkedHashSet;
 import java.util.Properties;
-import java.util.Set;
-import java.util.SortedSet;
 
 /**
  * TODO : javadoc
@@ -49,9 +48,9 @@ public interface Configuration {
 
 	public String getInjectionDateFormat();
 
-	public Set<ValueInjection> getValueInjections();
+	public LinkedHashSet<ValueInjection> getValueInjections();
 
-	public SortedSet<String> getCatalogs();
+	public LinkedHashSet<String> getCatalogs();
 
 	public Profiling getProfiling();
 }
