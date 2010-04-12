@@ -51,7 +51,11 @@ dependencies {
 
 group = 'org.jboss.jdocbook'
 version = '1.0.0-SNAPSHOT'
-
+configure(install.repositories.mavenInstaller){
+	pom.project {
+		artifactId 'jdocbook-core'
+	}
+}
 manifest.mainAttributes(
     provider: 'gradle',
     'Implementation-Url': 'http://jboss.org',
