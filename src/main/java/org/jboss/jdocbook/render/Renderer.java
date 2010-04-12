@@ -21,36 +21,19 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook;
-
-import java.io.File;
-import java.util.Locale;
+package org.jboss.jdocbook.render;
 
 /**
- * Describes a source of translations
+ * Contract for applying a DocBook format, rendering a specific type of output.
  *
  * @author Steve Ebersole
  */
-public interface TranslationSource {
+public interface Renderer {
 	/**
-	 * Retrieve the translation language.
+	 * Perform the rendering.
 	 *
-	 * @return The translation language.
+	 * @param source The source to be rendered.
+	 * @param formatOptions The formatting options.
 	 */
-	public Locale getLanguage();
-
-	/**
-	 * Retrieve the directory containing PO files for this translation.
-	 *
-	 * @return This translation's PO file directory.
-	 */
-	public File resolvePoDirectory();
-
-	/**
-	 * Retrieve the directory to which translated XML files should go (created by applying the PO files on top of the
-	 * master XML).
-	 *
-	 * @return This translation's XML directory.
-	 */
-	public File resolveTranslatedXmlDirectory();
+	public void render(RenderingSource source, FormatOptions formatOptions);
 }

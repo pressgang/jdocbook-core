@@ -24,7 +24,7 @@
 package org.jboss.jdocbook;
 
 /**
- * TODO : javadoc
+ * Descriptor of the profiling to be applied.
  *
  * @author Steve Ebersole
  */
@@ -42,6 +42,11 @@ public class Profiling {
 		this.attributeValue = attributeValue;
 	}
 
+	/**
+	 * Is profiling to be applied at all?
+	 *
+	 * @return True if profiling is to be performed; false otherwise.
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -50,6 +55,11 @@ public class Profiling {
 		this.enabled = enabled;
 	}
 
+	/**
+	 * Retrieve the attribute name on which to perform profiling.
+	 *
+	 * @return The profiling attribute name
+	 */
 	public String getAttributeName() {
 		return attributeName;
 	}
@@ -58,6 +68,11 @@ public class Profiling {
 		this.attributeName = attributeName;
 	}
 
+	/**
+	 * Retrieve the value by which to perform profiling.
+	 *
+	 * @return The profiling attribute value
+	 */
 	public String getAttributeValue() {
 		return attributeValue;
 	}

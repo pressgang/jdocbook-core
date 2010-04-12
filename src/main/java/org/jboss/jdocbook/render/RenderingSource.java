@@ -21,18 +21,43 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.profile;
+package org.jboss.jdocbook.render;
+
+import java.io.File;
+import java.util.Locale;
 
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Describes a source to be rendered
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
+public interface RenderingSource {
 	/**
-	 * Apply profiling to the given source.
+	 * Get the language that this source represents.
 	 *
-	 * @param profilingSource The source to be profiled
+	 * @return The source language.
 	 */
-	public void profile(ProfilingSource profilingSource);
+	public Locale getLanguage();
+
+	/**
+	 * Retrieve the source document {@link File} reference.
+	 *
+	 * @return The source document {@link File}
+	 */
+	public File resolveSourceDocument();
+
+	/**
+	 * Retrieve publishing base directory for this language.  Each format will write into a sub-directory
+	 * of this named directory.
+	 *
+	 * @return The publishing base {@link File directory}
+	 */
+	public File resolvePublishingBaseDirectory();
+
+	/**
+	 * Retrieve the directory into which <tt>XSL-FO</tt> files for this language should get written.
+	 *
+	 * @return The <tt>XSL-FO</tt> {@link File directory}
+	 */
+	public File getXslFoDirectory();
 }

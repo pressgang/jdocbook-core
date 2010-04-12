@@ -23,12 +23,49 @@
  */
 package org.jboss.jdocbook;
 
+import java.io.File;
+import java.util.List;
+
 /**
- * TODO : javadoc
+ * Defines information about the execution environment.
  *
  * @author Steve Ebersole
  */
 public interface Environment {
+	/**
+	 * Retrieve the resource lookup delegate for this environment.
+	 *
+	 * @return The resource lookup delegate
+	 */
 	public ResourceDelegate getResourceDelegate();
+
+	/**
+	 * Get the master language descriptor.
+	 * <p/>
+	 * Note: it was decided to place it here since this is essentially static information.
+	 *
+	 * @return The master language descriptor.
+	 */
 	public MasterLanguageDescriptor getMasterLanguageDescriptor();
+
+	/**
+	 * Retrieve the work directory
+	 *
+	 * @return THe work directory
+	 */
+	public File getWorkDirectory();
+
+	/**
+	 * Retrieve the staging directory
+	 *
+	 * @return The staging directory
+	 */
+	public File getStagingDirectory();
+
+	/**
+	 * Retrieve any directories explicitly containing fonts.
+	 * 
+	 * @return Font directories.
+	 */
+	public List<File> getFontDirectories();
 }

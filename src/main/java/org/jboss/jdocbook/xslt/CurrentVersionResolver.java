@@ -23,7 +23,7 @@
  */
 package org.jboss.jdocbook.xslt;
 
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 
 /**
  * Map hrefs starting with <tt>http://docbook.sourceforge.net/release/xsl/current/</tt>
@@ -35,9 +35,9 @@ public class CurrentVersionResolver extends VersionResolver {
 	/**
 	 * Constructs a new CurrentVersionResolver instance.
 	 *
-	 * @param componentFactory The execution environment
+	 * @param componentRegistry The execution environment
 	 */
-	public CurrentVersionResolver(JDocBookComponentFactory componentFactory) {
-		super( componentFactory, "current" );
+	public CurrentVersionResolver(JDocBookComponentRegistry componentRegistry) {
+		super( componentRegistry, "current" );
 	}
 }

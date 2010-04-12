@@ -21,6 +21,10 @@ dependencies {
     xercesVersion = '2.8.0'
     saxonVersion = '6.5.3'
     plexusUtilsVersion = '2.0.3'
+    fopVersion = 'svn-r784789'
+    avalonVersion = '4.3.1'
+    jdomVersion = '1.0'
+
     junitVersion = '3.8.2'
 
     compile(
@@ -30,7 +34,12 @@ dependencies {
             [group: 'xml-resolver', name: 'xml-resolver', version: xmlResolverVersion],
             [group: 'xerces', name: 'xercesImpl', version: xercesVersion],
             [group: 'saxon', name: 'saxon', version: saxonVersion],
-            [group: 'org.codehaus.plexus', name: 'plexus-utils', version: plexusUtilsVersion]
+            [group: 'org.codehaus.plexus', name: 'plexus-utils', version: plexusUtilsVersion],
+            [group: 'org.apache.xmlgraphics', name: 'fop', version: fopVersion],
+            [group: 'org.apache.xmlgraphics', name: 'xmlgraphics-commons', version: 'fop-'+fopVersion],
+            [group: 'org.apache.avalon.framework', name: 'avalon-framework-api', version: avalonVersion],
+            [group: 'org.apache.avalon.framework', name: 'avalon-framework-impl', version: avalonVersion],
+            [group: 'jdom', name: 'jdom', version: jdomVersion]
     )
     testCompile(
             [group: 'junit', name: 'junit', version: junitVersion],

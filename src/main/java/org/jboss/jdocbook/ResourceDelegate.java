@@ -26,7 +26,7 @@ package org.jboss.jdocbook;
 import java.net.URL;
 
 /**
- * TODO : javadoc
+ * Delegate for performing resource look ups.
  *
  * @author Steve Ebersole
  */

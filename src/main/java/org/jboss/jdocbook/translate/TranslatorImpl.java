@@ -32,35 +32,34 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.jboss.jdocbook.Configuration;
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.JDocBookProcessException;
 import org.jboss.jdocbook.MasterLanguageDescriptor;
-import org.jboss.jdocbook.TranslationSource;
 import org.jboss.jdocbook.util.FileUtils;
 import org.jboss.jdocbook.util.TranslationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO : javadoc
+ * Implementation of the {@link Translator} contract
  *
  * @author Steve Ebersole
  */
 public class TranslatorImpl implements Translator {
 	private static final Logger log = LoggerFactory.getLogger( TranslatorImpl.class );
 
-	private JDocBookComponentFactory componentFactory;
+	private JDocBookComponentRegistry componentRegistry;
 
-	public TranslatorImpl(JDocBookComponentFactory componentFactory) {
-		this.componentFactory = componentFactory;
+	public TranslatorImpl(JDocBookComponentRegistry componentRegistry) {
+		this.componentRegistry = componentRegistry;
 	}
 
 	protected MasterLanguageDescriptor master() {
-		return componentFactory.getEnvironment().getMasterLanguageDescriptor();
+		return componentRegistry.getEnvironment().getMasterLanguageDescriptor();
 	}
 
 	private Configuration configuration() {
-		return componentFactory.getConfiguration();
+		return componentRegistry.getConfiguration();
 	}
 
 	/**

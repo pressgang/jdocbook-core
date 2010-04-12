@@ -24,7 +24,6 @@
 package org.jboss.jdocbook.xslt;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +42,9 @@ import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.jboss.jdocbook.Configuration;
 import org.jboss.jdocbook.Environment;
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.ResourceDelegate;
+import org.jboss.jdocbook.util.NoOpWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -55,29 +55,32 @@ import org.xml.sax.Attributes;
  * @author Steve Ebersole
  */
 public class TransformerBuilderImpl implements TransformerBuilder {
-	private final JDocBookComponentFactory componentFactory;
+	private final JDocBookComponentRegistry componentRegistry;
 	private final CatalogResolver catalogResolver;
 
-	public TransformerBuilderImpl(JDocBookComponentFactory componentFactory) {
-		this.componentFactory = componentFactory;
+	public TransformerBuilderImpl(JDocBookComponentRegistry componentRegistry) {
+		this.componentRegistry = componentRegistry;
 
 		final CatalogManager catalogManager;
-		if ( componentFactory.getConfiguration().getCatalogs() == null
-				|| componentFactory.getConfiguration().getCatalogs().size() == 0 ) {
+		if ( componentRegistry.getConfiguration().getCatalogs() == null
+				|| componentRegistry.getConfiguration().getCatalogs().size() == 0 ) {
 			catalogManager = new ImplicitCatalogManager();
 		}
 		else {
-			catalogManager = new ExplicitCatalogManager( componentFactory.getConfiguration().getCatalogs() );
+			catalogManager = new ExplicitCatalogManager( componentRegistry.getConfiguration().getCatalogs() );
 		}
 		catalogResolver = new CatalogResolver( catalogManager );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public CatalogResolver getCatalogResolver() {
 		return catalogResolver;
 	}
 
 	protected Environment environment() {
-		return componentFactory.getEnvironment();
+		return componentRegistry.getEnvironment();
 	}
 
 	protected ResourceDelegate resourceDelegate() {
@@ -85,14 +88,20 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 	}
 
 	protected Configuration configuration() {
-		return componentFactory.getConfiguration();
+		return componentRegistry.getConfiguration();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Transformer buildStandardTransformer(URL xslt) {
 		URIResolver uriResolver = buildStandardUriResolver();
 		return buildTransformer( xslt, uriResolver );
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Transformer buildStandardTransformer(String xsltResource) {
 		URIResolver uriResolver = buildStandardUriResolver();
 		return buildTransformer( resourceDelegate().requireResource( xsltResource ), uriResolver );
@@ -106,10 +115,21 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 
 	private void applyStandardResolvers(ResolverChain resolverChain) {
 		// See https://jira.jboss.org/jira/browse/MPJDOCBOOK-49
-		resolverChain.addResolver( new CurrentVersionResolver( componentFactory ) );
+		resolverChain.addResolver( new CurrentVersionResolver( componentRegistry ) );
 		resolverChain.addResolver( new RelativeJarUriResolver() );
-		resolverChain.addResolver( new ClasspathResolver( componentFactory ) );
+		resolverChain.addResolver( new ClasspathResolver( componentRegistry ) );
 		resolverChain.addResolver( catalogResolver );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Transformer buildTransformer(FormatPlan formatPlan, URL customStylesheet) throws XSLTException {
+		URIResolver uriResolver = buildStandardUriResolver();
+		URL xsltStylesheet = customStylesheet == null
+				? resourceDelegate().requireResource( formatPlan.getStylesheetResource() )
+				: customStylesheet;
+		return buildTransformer( xsltStylesheet, uriResolver );
 	}
 
 	private HashMap<String, Templates> transformerTemplatesCache = new HashMap<String, Templates>();
@@ -210,14 +230,4 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		}
 	}
 
-	public static class NoOpWriter extends Writer {
-		public void write(char[] buffer, int off, int len) {
-		}
-
-		public void flush() {
-		}
-
-		public void close() {
-		}
-	}
 }

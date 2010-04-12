@@ -39,7 +39,6 @@ import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 import org.jboss.jdocbook.JDocBookProcessException;
 import org.jboss.jdocbook.xslt.EntityResolverChain;
 import org.jboss.jdocbook.xslt.LocalDocBookEntityResolver;
-import org.jboss.jdocbook.xslt.TransformerBuilderImpl;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -84,7 +83,7 @@ public class XIncludeHelper {
     	    parserFactory.setXIncludeAware( true  );
 
 			Source transformationSource = FileUtils.createSAXSource( root, entityResolverChain, null );
-			Result transformationResult = new StreamResult( new TransformerBuilderImpl.NoOpWriter() );
+			Result transformationResult = new StreamResult( new NoOpWriter() );
 
 			javax.xml.transform.TransformerFactory transformerFactory = new com.icl.saxon.TransformerFactoryImpl();
 			transformerFactory.newTransformer().transform( transformationSource, transformationResult );

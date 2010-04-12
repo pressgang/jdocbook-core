@@ -25,10 +25,9 @@ package org.jboss.jdocbook.translate;
 
 
 import org.jboss.jdocbook.JDocBookProcessException;
-import org.jboss.jdocbook.TranslationSource;
 
 /**
- * Performs the work of applying a language's PO files to generate its set of translated DocBook XML.
+ * Contract for performing the work of applying a language's PO files to generate its set of translated DocBook XML.
  *
  * @author Steve Ebersole
  */

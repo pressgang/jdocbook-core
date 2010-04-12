@@ -30,7 +30,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 
 /**
  * Maps docbook-version based URIs to local classpath lookups.  These URIs are in the form
@@ -41,18 +41,18 @@ import org.jboss.jdocbook.JDocBookComponentFactory;
 public class VersionResolver implements URIResolver {
 	public static final String BASE_HREF = "http://docbook.sourceforge.net/release/xsl/";
 
-	private JDocBookComponentFactory componentFactory;
+	private JDocBookComponentRegistry componentRegistry;
 	private final String version;
 	private final String versionHref;
 
 	/**
 	 * Constructs a VersionResolver instance using the given <tt>version</tt>.
 	 *
-	 * @param componentFactory The execution environment
+	 * @param componentRegistry The execution environment
 	 * @param version The version.
 	 */
-	public VersionResolver(JDocBookComponentFactory componentFactory, String version) {
-		this.componentFactory = componentFactory;
+	public VersionResolver(JDocBookComponentRegistry componentRegistry, String version) {
+		this.componentRegistry = componentRegistry;
 		this.version = version;
 		this.versionHref = BASE_HREF + version;
 	}
@@ -73,7 +73,7 @@ public class VersionResolver implements URIResolver {
 	private Source resolve(String href) {
 		String resource = href.substring( versionHref.length() );
 		try {
-			URL resourceURL = componentFactory.getEnvironment().getResourceDelegate().requireResource( resource );
+			URL resourceURL = componentRegistry.getEnvironment().getResourceDelegate().requireResource( resource );
 			return new StreamSource( resourceURL.openStream(), resourceURL.toExternalForm() );
 		}
 		catch ( IllegalArgumentException e ) {

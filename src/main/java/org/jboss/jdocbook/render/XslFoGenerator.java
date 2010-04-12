@@ -21,18 +21,26 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.profile;
+package org.jboss.jdocbook.render;
+
+import org.jboss.jdocbook.xslt.FormatPlan;
 
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Used to create a <tt>XSL-FO</tt> file.  If you ever run into problems the PDF generation via FOP, the FOP
+ * folks will inevitably ask for the <tt>XSL-FO</tt> file.  jDocBook itself does not generate the <tt>XSL-FO</tt>
+ * file, instead generating the PDF in a single pass.  This tasks, however, allows you to execute the first
+ * stage pf that process and create the <tt>XSL-FO</tt> file.
+ * <p/>
+ * To reiterate, this is not a task you'd use in normal processing.
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
+public interface XslFoGenerator {
 	/**
-	 * Apply profiling to the given source.
+	 * Generate the <tt>XSL-FO</tt> file.
 	 *
-	 * @param profilingSource The source to be profiled
+	 * @param source The source document.
+	 * @param formatOptions The format options for FOP-based formatting plan (mainly needed for stylesheet references).
 	 */
-	public void profile(ProfilingSource profilingSource);
+	public void generateXslFo(RenderingSource source, FormatOptions formatOptions);
 }

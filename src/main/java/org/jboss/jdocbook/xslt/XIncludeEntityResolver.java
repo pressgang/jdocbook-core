@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashSet;
 
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.ValueInjection;
 import org.jboss.jdocbook.util.FileUtils;
 import org.xml.sax.EntityResolver;
@@ -45,14 +45,14 @@ import org.xml.sax.SAXException;
  * @author Steve Ebersole
  */
 public class XIncludeEntityResolver implements EntityResolver {
-	private final JDocBookComponentFactory componentFactory;
+	private final JDocBookComponentRegistry componentRegistry;
 
-	public XIncludeEntityResolver(JDocBookComponentFactory componentFactory) {
-		this.componentFactory = componentFactory;
+	public XIncludeEntityResolver(JDocBookComponentRegistry componentRegistry) {
+		this.componentRegistry = componentRegistry;
 	}
 
 	protected LinkedHashSet<ValueInjection> getValueInjections() {
-		return componentFactory.getConfiguration().getValueInjections();
+		return componentRegistry.getConfiguration().getValueInjections();
 	}
 
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {

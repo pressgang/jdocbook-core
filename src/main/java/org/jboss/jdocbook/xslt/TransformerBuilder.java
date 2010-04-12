@@ -25,7 +25,6 @@ package org.jboss.jdocbook.xslt;
 
 import java.net.URL;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.URIResolver;
 
 import org.apache.xml.resolver.tools.CatalogResolver;
 
@@ -42,5 +41,5 @@ public interface TransformerBuilder {
 
 	public Transformer buildStandardTransformer(String xsltResource);
 
-//	public Transformer buildTransformer(FormatPlan formatPlan, URL customStylesheet) throws XSLTException {
+	public Transformer buildTransformer(FormatPlan formatPlan, URL customStylesheet) throws XSLTException;
 }

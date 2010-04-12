@@ -21,18 +21,32 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.profile;
+package org.jboss.jdocbook.render;
 
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Describes certain user specified options in regard to a particular
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
+public interface FormatOptions {
 	/**
-	 * Apply profiling to the given source.
+	 * Retrieve the format name.  Should match with a standard DocBook format.
 	 *
-	 * @param profilingSource The source to be profiled
+	 * @return The format name.
 	 */
-	public void profile(ProfilingSource profilingSource);
+	public String getName();
+
+	/**
+	 * Retrieve the name to use in naming the resulting rendered output file.
+	 *
+	 * @return The file name to use.
+	 */
+	public String getTargetFinalName();
+
+	/**
+	 * Retrieve the resource name of a custom <tt>XSLT</tt> stylesheet to use.
+	 *
+	 * @return The custom <tt>XSLT</tt> stylesheet to use.
+	 */
+	public String getStylesheetResource();
 }

@@ -28,14 +28,43 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * TODO : javadoc
+ * Descriptor of the master language.
  *
  * @author Steve Ebersole
  */
 public interface MasterLanguageDescriptor {
+	/**
+	 * Retrieve the master language.
+	 *
+	 * @return The master language.
+	 */
 	public Locale getLanguage();
+
+	/**
+	 * Retrive the GNU gettext <tt>POT</tt> directory.
+	 *
+	 * @return The <tt>POT</tt> directory.
+	 */
 	public File getPotDirectory();
+
+	/**
+	 * Retrieve the base directory for the master language sources.
+	 *
+	 * @return The base source directory.
+	 */
 	public File getBaseSourceDirectory();
-	public File getRootDocument();
+
+	/**
+	 * Retrieve the file reference for the root source document.
+	 *
+	 * @return The root document file.
+	 */
+	public File getRootDocumentFile();
+
+	/**
+	 * Retrieve the full set of source files, including <tt>XInclude</tt> files.
+	 *
+	 * @return The complete document file set.
+	 */
 	public Set<File> getDocumentFiles();
 }

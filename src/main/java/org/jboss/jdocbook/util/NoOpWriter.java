@@ -21,18 +21,22 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.profile;
+package org.jboss.jdocbook.util;
+
+import java.io.Writer;
 
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Writer which does nothing.
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
-	/**
-	 * Apply profiling to the given source.
-	 *
-	 * @param profilingSource The source to be profiled
-	 */
-	public void profile(ProfilingSource profilingSource);
+public class NoOpWriter extends Writer {
+	public void write(char[] buffer, int off, int len) {
+	}
+
+	public void flush() {
+	}
+
+	public void close() {
+	}
 }

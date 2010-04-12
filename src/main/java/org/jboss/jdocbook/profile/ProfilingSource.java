@@ -23,16 +23,33 @@
  */
 package org.jboss.jdocbook.profile;
 
+import java.io.File;
+import java.util.Locale;
+
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Describes a source to be profiled
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
+public interface ProfilingSource {
 	/**
-	 * Apply profiling to the given source.
+	 * Retrieve the language for this source.
 	 *
-	 * @param profilingSource The source to be profiled
+	 * @return The language for this source.
 	 */
-	public void profile(ProfilingSource profilingSource);
+	public Locale getLanguage();
+
+	/**
+	 * Retrieve the DocBook XML document file  to be profiled.
+	 *
+	 * @return The DocBook XML document file.
+	 */
+	public File resolveDocumentFile();
+
+	/**
+	 * Retrieve the profiled document file.
+	 *
+	 * @return The profiled (generated) file.
+	 */
+	public File resolveProfiledDocumentFile();
 }

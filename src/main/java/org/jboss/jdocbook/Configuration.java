@@ -27,30 +27,65 @@ import java.util.LinkedHashSet;
 import java.util.Properties;
 
 /**
- * TODO : javadoc
+ * Describes general user configuration data.
  *
  * @author Steve Ebersole
  */
 public interface Configuration {
-	public static final String DEFAULT_STANDARD_DATE_INJECTION_FORMAT = "yyyy-MM-dd";
-
+	/**
+	 * Defines any ad-hoc <tt>XSLT</tt> parameters to be passed to the built transformer.
+	 *
+	 * @return The <tt>XSLT</tt> parameters.
+	 */
 	public Properties getTransformerParameters();
 
+	/**
+	 * Should relative uris be used to reference images?
+	 *
+	 * @return True if relative uris should be used; false otherwise.
+	 */
 	public boolean isUseRelativeImageUris();
 
+	/**
+	 * Retrieve the separator used in locale strings.
+	 *
+	 * @return The local separator
+	 */
 	public char getLocaleSeparator();
 
+	/**
+	 * Should we instruct <a href="http://xmlgraphics.apache.org/fop/">FOP</a> to auto-detect fonts via
+	 * system-specific means?
+	 *
+	 * @return True if FOP should be instructed to auto-detect fonts; false otherwise.
+	 */
 	public boolean isAutoDetectFontsEnabled();
 
+	/**
+	 * Should we use the <a href="http://xmlgraphics.apache.org/fop/">FOP</a> font cache?
+	 *
+	 * @return True to enable font caching; false otherwise.
+	 */
 	public boolean isUseFopFontCacheEnabled();
 
-	public boolean isApplyStandardInjectionValuesEnabled();
-
-	public String getInjectionDateFormat();
-
+	/**
+	 * Retrieve any DTD entity values to be injected into XML documents.
+	 *
+	 * @return Any DTD entity injection values.
+	 */
 	public LinkedHashSet<ValueInjection> getValueInjections();
 
+	/**
+	 * Retrieve any additional catalog (uri/entity resolution) paths.
+	 *
+	 * @return Additional catalog paths.
+	 */
 	public LinkedHashSet<String> getCatalogs();
 
+	/**
+	 * Retrieve the profiling configuration.
+	 *
+	 * @return The profiling configuration.
+	 */
 	public Profiling getProfiling();
 }

@@ -33,9 +33,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.jboss.jdocbook.Configuration;
 import org.jboss.jdocbook.Environment;
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.MasterLanguageDescriptor;
-import org.jboss.jdocbook.ProfilingSource;
+import org.jboss.jdocbook.profile.ProfilingSource;
 import org.jboss.jdocbook.util.Constants;
 import org.jboss.jdocbook.util.FileUtils;
 import org.jboss.jdocbook.util.TranslationUtils;
@@ -48,25 +48,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO : javadoc
+ * Implementation of the {@link Profiler} contract
  *
  * @author Steve Ebersole
  */
 public class ProfilerImpl implements Profiler {
 	private static final Logger log = LoggerFactory.getLogger( ProfilerImpl.class );
 
-	private final JDocBookComponentFactory componentFactory;
+	private final JDocBookComponentRegistry componentRegistry;
 	private final EntityResolverChain entityResolver;
 
-	public ProfilerImpl(JDocBookComponentFactory componentFactory) {
-		this.componentFactory = componentFactory;
-		entityResolver = new EntityResolverChain( componentFactory.getTransformerBuilder().getCatalogResolver() );
+	public ProfilerImpl(JDocBookComponentRegistry componentRegistry) {
+		this.componentRegistry = componentRegistry;
+		entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
 		entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
-		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentFactory ) );
+		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
 	}
 
 	protected Environment environment() {
-		return componentFactory.getEnvironment();
+		return componentRegistry.getEnvironment();
 	}
 
 	protected MasterLanguageDescriptor master() {
@@ -74,11 +74,11 @@ public class ProfilerImpl implements Profiler {
 	}
 
 	private Configuration configuration() {
-		return componentFactory.getConfiguration();
+		return componentRegistry.getConfiguration();
 	}
 
 	private TransformerBuilder transformerBuilder() {
-		return componentFactory.getTransformerBuilder();
+		return componentRegistry.getTransformerBuilder();
 	}
 
 	/**

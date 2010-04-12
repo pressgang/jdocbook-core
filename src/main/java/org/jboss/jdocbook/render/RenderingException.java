@@ -21,18 +21,23 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.profile;
+package org.jboss.jdocbook.render;
+
+import org.jboss.jdocbook.JDocBookProcessException;
 
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Indicates issues performing rendering.
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
-	/**
-	 * Apply profiling to the given source.
-	 *
-	 * @param profilingSource The source to be profiled
-	 */
-	public void profile(ProfilingSource profilingSource);
+public class RenderingException extends JDocBookProcessException {
+	private static final long serialVersionUID = -3442815604126090861L;
+
+	public RenderingException(String message) {
+		super( message );
+	}
+
+	public RenderingException(String message, Throwable cause) {
+		super( message, cause );
+	}
 }

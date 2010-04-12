@@ -25,18 +25,21 @@ package org.jboss.jdocbook;
 
 import org.jboss.jdocbook.profile.Profiler;
 import org.jboss.jdocbook.profile.ProfilerImpl;
+import org.jboss.jdocbook.render.Renderer;
+import org.jboss.jdocbook.render.RendererImpl;
+import org.jboss.jdocbook.render.XslFoGenerator;
+import org.jboss.jdocbook.render.XslFoGeneratorImpl;
 import org.jboss.jdocbook.translate.Translator;
 import org.jboss.jdocbook.translate.TranslatorImpl;
 import org.jboss.jdocbook.xslt.TransformerBuilder;
 import org.jboss.jdocbook.xslt.TransformerBuilderImpl;
-import org.xml.sax.EntityResolver;
 
 /**
- * TODO : javadoc
+ * Registry for the various jDocBook components.
  *
  * @author Steve Ebersole
  */
-public class JDocBookComponentFactory {
+public class JDocBookComponentRegistry {
 	private final Environment environment;
 	private final Configuration configuration;
 
@@ -44,8 +47,10 @@ public class JDocBookComponentFactory {
 
 	private final TranslatorImpl translator;
 	private final ProfilerImpl profiler;
+	private final RendererImpl renderer;
+	private final XslFoGeneratorImpl xslFoGenerator;
 
-	public JDocBookComponentFactory(Environment environment, Configuration configuration) {
+	public JDocBookComponentRegistry(Environment environment, Configuration configuration) {
 		this.environment = environment;
 		this.configuration = configuration;
 
@@ -53,25 +58,65 @@ public class JDocBookComponentFactory {
 
 		this.translator = new TranslatorImpl( this );
 		this.profiler = new ProfilerImpl( this );
+		this.renderer = new RendererImpl( this );
+		this.xslFoGenerator = new XslFoGeneratorImpl( this );
 	}
 
+	/**
+	 * Retrieve the info for the environment in which jDocBook is being executed.
+	 *
+	 * @return The execution environment.
+	 */
 	public Environment getEnvironment() {
 		return environment;
 	}
 
+	/**
+	 * Retrieve the user configuration.
+	 *
+	 * @return The user configuration.
+	 */
 	public Configuration getConfiguration() {
 		return configuration;
 	}
 
+	/**
+	 * Retrieve the builder for <tt>XSLT</tt> {@link javax.xml.transform.Transformer} instances.
+	 *
+	 * @return The transformer builder
+	 */
 	public TransformerBuilder getTransformerBuilder() {
 		return transformerBuilder;
 	}
 
+	/**
+	 * Retrieve the reference to the translator service.
+	 *
+	 * @return The translator service
+	 */
 	public Translator getTranslator() {
 		return translator;
 	}
 
+	/**
+	 * Retrieve the reference to the profiler service.
+	 *
+	 * @return The profiler service
+	 */
 	public Profiler getProfiler() {
 		return profiler;
+	}
+
+	/**
+	 * Retrieve the reference to the renderer service.
+	 *
+	 * @return The renderer service
+	 */
+	public Renderer getRenderer() {
+		return renderer;
+	}
+
+	public XslFoGenerator getXslFoGenerator() {
+		return xslFoGenerator;
 	}
 }

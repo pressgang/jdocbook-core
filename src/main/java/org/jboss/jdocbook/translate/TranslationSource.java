@@ -21,18 +21,36 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook.profile;
+package org.jboss.jdocbook.translate;
+
+import java.io.File;
+import java.util.Locale;
 
 /**
- * Contract for applying DocBook <a href="http://www.sagehill.net/docbookxsl/Profiling.html">profiling</a>
+ * Describes a source of translations
  *
  * @author Steve Ebersole
  */
-public interface Profiler {
+public interface TranslationSource {
 	/**
-	 * Apply profiling to the given source.
+	 * Retrieve the translation language.
 	 *
-	 * @param profilingSource The source to be profiled
+	 * @return The translation language.
 	 */
-	public void profile(ProfilingSource profilingSource);
+	public Locale getLanguage();
+
+	/**
+	 * Retrieve the directory containing PO files for this translation.
+	 *
+	 * @return This translation's PO file directory.
+	 */
+	public File resolvePoDirectory();
+
+	/**
+	 * Retrieve the directory to which translated XML files should go (created by applying the PO files on top of the
+	 * master XML).
+	 *
+	 * @return This translation's XML directory.
+	 */
+	public File resolveTranslatedXmlDirectory();
 }

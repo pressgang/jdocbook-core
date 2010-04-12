@@ -21,35 +21,22 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook;
+package org.jboss.jdocbook.util;
 
 import java.io.File;
-import java.util.Locale;
 
 /**
- * TODO : javadoc
+ * Strategy for naming target files based on the source file.
  *
  * @author Steve Ebersole
  */
-public interface ProfilingSource {
+public interface TargetNamingStrategy {
 	/**
-	 * Retrieve the language for this source.
+	 * Give a source file, determine the appropriate target file name.
 	 *
-	 * @return The language for this source.
+	 * @param source The source file.
+	 * @return The target file name.
 	 */
-	public Locale getLanguage();
-
-	/**
-	 * Retrieve the DocBook XML document file  to be profiled.
-	 *
-	 * @return The DocBook XML document file.
-	 */
-	public File resolveDocumentFile();
-
-	/**
-	 * Retrieve the profiled document file.
-	 *
-	 * @return The profiled (generated) file.
-	 */
-	public File resolveProfiledDocumentFile();
+	public String determineTargetFileName(File source);
 }
+

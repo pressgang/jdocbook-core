@@ -30,7 +30,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jboss.jdocbook.JDocBookComponentFactory;
+import org.jboss.jdocbook.JDocBookComponentRegistry;
 
 /**
  * Resolves classpath references from the given classloader using classpath:/
@@ -42,10 +42,10 @@ import org.jboss.jdocbook.JDocBookComponentFactory;
 public class ClasspathResolver implements URIResolver {
 	public static final String SCHEME = "classpath:";
 
-	private final JDocBookComponentFactory componentFactory;
+	private final JDocBookComponentRegistry componentRegistry;
 
-	public ClasspathResolver(JDocBookComponentFactory componentFactory) {
-		this.componentFactory = componentFactory;
+	public ClasspathResolver(JDocBookComponentRegistry componentRegistry) {
+		this.componentRegistry = componentRegistry;
 	}
 
 	public Source resolve(String href, String base) throws TransformerException {
@@ -55,7 +55,7 @@ public class ClasspathResolver implements URIResolver {
 		}
 
 		try {
-			URL url = componentFactory.getEnvironment().getResourceDelegate().locateResource( href );
+			URL url = componentRegistry.getEnvironment().getResourceDelegate().locateResource( href );
 			if ( url != null ) {
 				return new StreamSource( url.openStream(), url.toExternalForm() );
 			}
