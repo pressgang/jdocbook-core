@@ -23,14 +23,21 @@
  */
 package org.jboss.jdocbook;
 
+import java.util.Locale;
+
 import org.jboss.jdocbook.profile.Profiler;
 import org.jboss.jdocbook.profile.ProfilerImpl;
 import org.jboss.jdocbook.render.Renderer;
 import org.jboss.jdocbook.render.RendererImpl;
 import org.jboss.jdocbook.render.XslFoGenerator;
 import org.jboss.jdocbook.render.XslFoGeneratorImpl;
+import org.jboss.jdocbook.translate.PoSynchronizer;
+import org.jboss.jdocbook.translate.PoSynchronizerImpl;
+import org.jboss.jdocbook.translate.PotSynchronizer;
+import org.jboss.jdocbook.translate.PotSynchronizerImpl;
 import org.jboss.jdocbook.translate.Translator;
 import org.jboss.jdocbook.translate.TranslatorImpl;
+import org.jboss.jdocbook.util.TranslationUtils;
 import org.jboss.jdocbook.xslt.TransformerBuilder;
 import org.jboss.jdocbook.xslt.TransformerBuilderImpl;
 
@@ -49,6 +56,8 @@ public class JDocBookComponentRegistry {
 	private final ProfilerImpl profiler;
 	private final RendererImpl renderer;
 	private final XslFoGeneratorImpl xslFoGenerator;
+	private final PotSynchronizerImpl potSynchronizer;
+	private final PoSynchronizerImpl poSynchronizer;
 
 	public JDocBookComponentRegistry(Environment environment, Configuration configuration) {
 		this.environment = environment;
@@ -60,6 +69,8 @@ public class JDocBookComponentRegistry {
 		this.profiler = new ProfilerImpl( this );
 		this.renderer = new RendererImpl( this );
 		this.xslFoGenerator = new XslFoGeneratorImpl( this );
+		this.potSynchronizer = new PotSynchronizerImpl( this );
+		this.poSynchronizer = new PoSynchronizerImpl( this );
 	}
 
 	/**
@@ -94,6 +105,7 @@ public class JDocBookComponentRegistry {
 	 *
 	 * @return The translator service
 	 */
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public Translator getTranslator() {
 		return translator;
 	}
@@ -103,6 +115,7 @@ public class JDocBookComponentRegistry {
 	 *
 	 * @return The profiler service
 	 */
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public Profiler getProfiler() {
 		return profiler;
 	}
@@ -112,11 +125,27 @@ public class JDocBookComponentRegistry {
 	 *
 	 * @return The renderer service
 	 */
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public Renderer getRenderer() {
 		return renderer;
 	}
 
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public XslFoGenerator getXslFoGenerator() {
 		return xslFoGenerator;
+	}
+
+	@SuppressWarnings({ "UnusedDeclaration" })
+	public PotSynchronizer getPotSynchronizer() {
+		return potSynchronizer;
+	}
+
+	@SuppressWarnings({ "UnusedDeclaration" })
+	public PoSynchronizer getPoSynchronizer() {
+		return poSynchronizer;
+	}
+
+	public String toLanguageString(Locale language) {
+		return TranslationUtils.render( language, configuration.getLocaleSeparator() );
 	}
 }

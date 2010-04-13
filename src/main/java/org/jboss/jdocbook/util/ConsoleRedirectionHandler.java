@@ -85,12 +85,4 @@ public class ConsoleRedirectionHandler {
 		redirectionStream.flush();
 		redirectionStream.close();
 	}
-
-	public PrintStream sysout() {
-		return sysout;
-	}
-
-	public PrintStream syserr() {
-		return syserr;
-	}
 }

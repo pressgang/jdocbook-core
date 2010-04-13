@@ -55,7 +55,6 @@ public class XIncludeHelper {
 	 *
 	 * @param root The file which (potentially) contains XIncludes.
 	 * @return The set of files references via XIncludes.
-	 *
 	 */
 	public static Set<File> locateInclusions(File root) {
 		final Set<File> includes = new TreeSet<File>();
@@ -94,13 +93,14 @@ public class XIncludeHelper {
 
 		return includes;
 	}
+
 	/**
 	 * Find all files referenced by master file, include indirectly inclusion.
-	 * <p>
+	 * <p/>
 	 * {@link #locateInclusions(File)} may return files that do not exist or are not normal XML files.
 	 * <p>
 	 * For example:
-	 * <p>
+	 * <p/>
 	 * 1. If a XML file has the following DOCTYPE, (this is asked by <tt>publican</tt>), then <em>Hibernate_Annotations_Reference_Guide.ent</em>
 	 * will be returned by {@link XIncludeHelper#locateInclusions(File)}
 	 * <blockquote><pre>
@@ -109,27 +109,33 @@ public class XIncludeHelper {
 	 * %BOOK_ENTITIES;
 	 * ]&gt;
 	 * </pre></blockquote>
-	 * <p>
+	 * <p/>
 	 * 2. Publican can use the following style XInclude:
 	 * <blockquote><pre>
 	 * &lt;xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Common_Content/Legal_Notice.xml"&gt;
 	 * </pre></blockquote>
 	 * This Legal_Notice.xml file actually do not exist in the current source directory, but in the predefined publican brand.
-	 * <p>
+	 *
+	 * @param masterFile The source file from which to start looking
+	 * @param files The collected, matching files.
 	 */
 	public static void findAllInclusionFiles(File masterFile, Set<File> files) {
-		if (masterFile == null || !masterFile.exists()
-				|| masterFile.getName() == null
-				|| !masterFile.getName().endsWith("xml")) {
+		if ( masterFile == null || !masterFile.exists() ) {
 			return;
 		}
-		Set<File> inclusions = locateInclusions(masterFile);
-		if (inclusions == null || inclusions.isEmpty())
+
+		if ( ! FileUtils.isXMLFile( masterFile ) ) {
 			return;
-		for (File inclusion : inclusions) {
-			if (inclusion.exists()) {
-				files.add(inclusion);
-				findAllInclusionFiles(inclusion, files);
+		}
+
+		Set<File> inclusions = locateInclusions( masterFile );
+		if ( inclusions == null || inclusions.isEmpty() ) {
+			return;
+		}
+		for ( File inclusion : inclusions ) {
+			if ( inclusion.exists() ) {
+				files.add( inclusion );
+				findAllInclusionFiles( inclusion, files );
 			}
 		}
 	}

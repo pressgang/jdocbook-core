@@ -34,8 +34,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.jboss.jdocbook.Configuration;
 import org.jboss.jdocbook.Environment;
 import org.jboss.jdocbook.JDocBookComponentRegistry;
-import org.jboss.jdocbook.MasterLanguageDescriptor;
-import org.jboss.jdocbook.profile.ProfilingSource;
 import org.jboss.jdocbook.util.Constants;
 import org.jboss.jdocbook.util.FileUtils;
 import org.jboss.jdocbook.util.TranslationUtils;
@@ -67,10 +65,6 @@ public class ProfilerImpl implements Profiler {
 
 	protected Environment environment() {
 		return componentRegistry.getEnvironment();
-	}
-
-	protected MasterLanguageDescriptor master() {
-		return environment().getMasterLanguageDescriptor();
 	}
 
 	private Configuration configuration() {

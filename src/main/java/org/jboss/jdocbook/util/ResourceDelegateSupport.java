@@ -33,6 +33,7 @@ import org.jboss.jdocbook.ResourceDelegate;
  *
  * @author Steve Ebersole
  */
+@SuppressWarnings({ "UnusedDeclaration" })
 public abstract class ResourceDelegateSupport implements ResourceDelegate {
 	protected abstract ClassLoader getResourceClassLoader();
 

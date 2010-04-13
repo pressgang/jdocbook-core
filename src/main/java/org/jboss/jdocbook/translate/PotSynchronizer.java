@@ -21,52 +21,22 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook;
+package org.jboss.jdocbook.translate;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.Set;
+import org.jboss.jdocbook.JDocBookProcessException;
 
 /**
- * Descriptor of the master language.
+ * Contract for synchronizing (creating/updating) PortableObjectTemplate (POT) file(s) from the master
+ * language document.  XIncludes are followed and processed as well.
  *
  * @author Steve Ebersole
  */
-public interface MasterLanguageDescriptor {
+public interface PotSynchronizer {
 	/**
-	 * Retrieve the master language.
+	 * Perform the synchronization on the the POT files pertaining to the (master language) DocBook source.
 	 *
-	 * @return The master language.
+	 * @throws JDocBookProcessException unable to synchronize POT files
 	 */
 	@SuppressWarnings({ "UnusedDeclaration" })
-	public Locale getLanguage();
-
-	/**
-	 * Retrive the GNU gettext <tt>POT</tt> directory.
-	 *
-	 * @return The <tt>POT</tt> directory.
-	 */
-	public File getPotDirectory();
-
-	/**
-	 * Retrieve the base directory for the master language sources.
-	 *
-	 * @return The base source directory.
-	 */
-	public File getBaseSourceDirectory();
-
-	/**
-	 * Retrieve the file reference for the root source document.
-	 *
-	 * @return The root document file.
-	 */
-	@SuppressWarnings({ "UnusedDeclaration" })
-	public File getRootDocumentFile();
-
-	/**
-	 * Retrieve the full set of source files, including <tt>XInclude</tt> files.
-	 *
-	 * @return The complete document file set.
-	 */
-	public Set<File> getDocumentFiles();
+	public void synchronizePot() throws JDocBookProcessException;
 }

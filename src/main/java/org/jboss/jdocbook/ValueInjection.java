@@ -28,6 +28,7 @@ package org.jboss.jdocbook;
  *
  * @author Steve Ebersole
  */
+@SuppressWarnings({ "UnusedDeclaration" })
 public class ValueInjection {
 	private String name;
 	private String value;

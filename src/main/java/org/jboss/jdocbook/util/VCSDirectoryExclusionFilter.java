@@ -21,52 +21,40 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook;
+package org.jboss.jdocbook.util;
 
 import java.io.File;
-import java.util.Locale;
-import java.util.Set;
+import java.io.FileFilter;
+
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.SelectorUtils;
 
 /**
- * Descriptor of the master language.
+ * A {@link java.io.FileFilter} which excludes VCS metadata directories...
  *
  * @author Steve Ebersole
  */
-public interface MasterLanguageDescriptor {
+public class VCSDirectoryExclusionFilter implements FileFilter {
 	/**
-	 * Retrieve the master language.
-	 *
-	 * @return The master language.
+	 * {@inheritDoc}
 	 */
-	@SuppressWarnings({ "UnusedDeclaration" })
-	public Locale getLanguage();
+	public boolean accept(File path) {
+		if ( path.isDirectory() ) {
+			if ( isVCSDirectory( path ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-	/**
-	 * Retrive the GNU gettext <tt>POT</tt> directory.
-	 *
-	 * @return The <tt>POT</tt> directory.
-	 */
-	public File getPotDirectory();
-
-	/**
-	 * Retrieve the base directory for the master language sources.
-	 *
-	 * @return The base source directory.
-	 */
-	public File getBaseSourceDirectory();
-
-	/**
-	 * Retrieve the file reference for the root source document.
-	 *
-	 * @return The root document file.
-	 */
-	@SuppressWarnings({ "UnusedDeclaration" })
-	public File getRootDocumentFile();
-
-	/**
-	 * Retrieve the full set of source files, including <tt>XInclude</tt> files.
-	 *
-	 * @return The complete document file set.
-	 */
-	public Set<File> getDocumentFiles();
+	public static boolean isVCSDirectory(File path) {
+		final String absolutePath = path.getAbsolutePath();
+		for ( int i = 0, X = DirectoryScanner.DEFAULTEXCLUDES.length; i < X; i++ ) {
+			if ( SelectorUtils.matchPath( DirectoryScanner.DEFAULTEXCLUDES[i], absolutePath, true ) ) {
+				// do not accept file on match against an exclude
+				return true;
+			}
+		}
+		return false;
+	}
 }

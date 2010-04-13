@@ -29,17 +29,46 @@ import javax.xml.transform.Transformer;
 import org.apache.xml.resolver.tools.CatalogResolver;
 
 /**
- * TODO : javadoc
+ * Builder of {@link Transformer} instances.
  *
  * @author Steve Ebersole
  */
 public interface TransformerBuilder {
 
+	/**
+	 * Get the {@link CatalogResolver} in effect for this builder.
+	 *
+	 * @return The catalog resolver
+	 */
 	public CatalogResolver getCatalogResolver();
 
+	/**
+	 * Build a transformer from the <tt>XSLT</tt> referenced by the given URL.
+	 *
+	 * @param xslt A URL referencing an <tt>XSLT</tt>
+	 *
+	 * @return The transformer.
+	 */
 	public Transformer buildStandardTransformer(URL xslt);
 
+	/**
+	 * Build a transformer from the <tt>XSLT</tt> referenced by the given resource name.
+	 *
+	 * @param xsltResource The resource name referencing an <tt>XSLT</tt>
+	 *
+	 * @return The transformer.
+	 */
 	public Transformer buildStandardTransformer(String xsltResource);
 
+	/**
+	 * Build a transformer from the format plan and <tt>XSLT</tt> referenced by the given resource name.
+	 *
+	 * @param formatPlan The format plan
+	 * @param customStylesheet A URL referencing an <tt>XSLT</tt>
+	 *
+	 * @return The transformer.
+	 *
+	 * @throws XSLTException Indicates an error building the transformer
+	 */
 	public Transformer buildTransformer(FormatPlan formatPlan, URL customStylesheet) throws XSLTException;
 }

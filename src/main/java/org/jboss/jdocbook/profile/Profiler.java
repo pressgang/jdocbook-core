@@ -34,5 +34,6 @@ public interface Profiler {
 	 *
 	 * @param profilingSource The source to be profiled
 	 */
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public void profile(ProfilingSource profilingSource);
 }

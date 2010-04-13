@@ -21,52 +21,24 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.jboss.jdocbook;
+package org.jboss.jdocbook.translate;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.Set;
+import org.jboss.jdocbook.JDocBookProcessException;
 
 /**
- * Descriptor of the master language.
+ * Contract for synchronizing (creating/updating) PortableObject (PO) file(s) for a given translation.  Each
+ * {@linkplain PotSynchronizer POT} file will result in a corresponding PO file for the given translation.
  *
  * @author Steve Ebersole
  */
-public interface MasterLanguageDescriptor {
+public interface PoSynchronizer {
 	/**
-	 * Retrieve the master language.
+	 * Synchronize the PO files for the given translation.
 	 *
-	 * @return The master language.
+	 * @param source The descriptor for the translation whose PO files are to be synchronized
+	 *
+	 * @throws JDocBookProcessException unable to synchronize POT files
 	 */
 	@SuppressWarnings({ "UnusedDeclaration" })
-	public Locale getLanguage();
-
-	/**
-	 * Retrive the GNU gettext <tt>POT</tt> directory.
-	 *
-	 * @return The <tt>POT</tt> directory.
-	 */
-	public File getPotDirectory();
-
-	/**
-	 * Retrieve the base directory for the master language sources.
-	 *
-	 * @return The base source directory.
-	 */
-	public File getBaseSourceDirectory();
-
-	/**
-	 * Retrieve the file reference for the root source document.
-	 *
-	 * @return The root document file.
-	 */
-	@SuppressWarnings({ "UnusedDeclaration" })
-	public File getRootDocumentFile();
-
-	/**
-	 * Retrieve the full set of source files, including <tt>XInclude</tt> files.
-	 *
-	 * @return The complete document file set.
-	 */
-	public Set<File> getDocumentFiles();
+	public void synchronizePo(TranslationSource source);
 }

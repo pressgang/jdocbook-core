@@ -23,8 +23,6 @@
  */
 package org.jboss.jdocbook.render;
 
-import org.jboss.jdocbook.xslt.FormatPlan;
-
 /**
  * Used to create a <tt>XSL-FO</tt> file.  If you ever run into problems the PDF generation via FOP, the FOP
  * folks will inevitably ask for the <tt>XSL-FO</tt> file.  jDocBook itself does not generate the <tt>XSL-FO</tt>
@@ -42,5 +40,6 @@ public interface XslFoGenerator {
 	 * @param source The source document.
 	 * @param formatOptions The format options for FOP-based formatting plan (mainly needed for stylesheet references).
 	 */
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public void generateXslFo(RenderingSource source, FormatOptions formatOptions);
 }

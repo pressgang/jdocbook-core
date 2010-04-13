@@ -39,5 +39,6 @@ public interface Translator {
 	 *
 	 * @throws JDocBookProcessException Indicates a problem performing the translation
 	 */
+	@SuppressWarnings({ "UnusedDeclaration" })
 	public void translate(TranslationSource translationSource);
 }

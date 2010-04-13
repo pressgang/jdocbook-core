@@ -25,7 +25,6 @@ package org.jboss.jdocbook.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -159,77 +158,14 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 	}
 
 	/**
-	 * (recursively) find the most recent timestamp in said directory.
-	 *
-	 * @param directory The directory to check.
-	 * @param acceptor A filter telling which files to consider.
-	 * @return The most recent {@link File#lastModified() timestamp} found.
-	 */
-	public static long findMostRecentTimestamp(File directory, FileFilter acceptor) {
-		return findMostRecentTimestamp( 0L, directory, acceptor );
-	}
-
-	private static long findMostRecentTimestamp(long current, File directory, FileFilter acceptor) {
-		long local = 0L;
-		for ( File subPath : directory.listFiles() ) {
-			final long temp;
-			if ( subPath.isDirectory() ) {
-				temp = findMostRecentTimestamp( current, directory, acceptor );
-			}
-			else if ( acceptor.accept( subPath ) ) {
-				temp = subPath.lastModified();
-			}
-			else {
-				temp = local;
-			}
-
-			if ( temp > local ) {
-				local = temp;
-			}
-		}
-		return local > current ? local : current;
-	}
-
-	/**
-	 * (recursively) find the least recent timestamp in said directory.
-	 *
-	 * @param directory The directory to check.
-	 * @param acceptor A filter telling which files to consider.
-	 * @return The least recent {@link File#lastModified() timestamp} found.
-	 */
-	public static long findLeastRecentTimestamp(File directory, FileFilter acceptor) {
-		return findLeastRecentTimestamp( Long.MAX_VALUE, directory, acceptor );
-	}
-
-	public static long findLeastRecentTimestamp(long current, File directory, FileFilter acceptor) {
-		long local = Long.MAX_VALUE;
-		for ( File subPath : directory.listFiles() ) {
-			final long temp;
-			if ( subPath.isDirectory() ) {
-				temp = findLeastRecentTimestamp( current, directory, acceptor );
-			}
-			else if ( acceptor.accept( subPath ) ) {
-				temp = subPath.lastModified();
-			}
-			else {
-				temp = local;
-			}
-
-			if ( temp < local ) {
-				local = temp;
-			}
-		}
-		return local < current ? local : current;
-	}
-
-	/**
 	 * Determine if the file is a XML file from file extension.
 	 *
-	 * @param file
-	 * @return
+	 * @param file The file to check
+	 *
+	 * @return True if the given file is determined to be an xml file.
 	 */
-	public static boolean isXMLFile(File file){
-		return file!=null && file.exists() && file.getName().endsWith("xml");
+	public static boolean isXMLFile(File file) {
+		return file != null && file.exists() && file.getName().endsWith( ".xml" );
 	}
 
 	/**

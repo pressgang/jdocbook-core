@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 
 /**
- * TODO : javadoc
+ * Implementation of the {@link TransformerBuilder} contract
  *
  * @author Steve Ebersole
  */
