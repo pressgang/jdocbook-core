@@ -42,7 +42,7 @@ public interface MasterLanguageDescriptor {
 	public Locale getLanguage();
 
 	/**
-	 * Retrive the GNU gettext <tt>POT</tt> directory.
+	 * Retrieve the GNU gettext <tt>POT</tt> directory.
 	 *
 	 * @return The <tt>POT</tt> directory.
 	 */
