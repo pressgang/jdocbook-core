@@ -68,21 +68,6 @@ manifest.mainAttributes(
     'Implementation-Vendor-Id': 'org.jboss'
 )
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
-    classifier = 'javadoc'
-}
-
-task sourcesJar(type: Jar, dependsOn: compileJava) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
 def pomConfig = {
     name 'jDocBook Core'
     description 'The core jDocBook functionality'
