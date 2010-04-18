@@ -1,17 +1,18 @@
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'maven'  // used for 'install' and 'upload'/'deploy' task
+apply url: "https://loom.svn.sourceforge.net/svnroot/loom/shared/trunk/artifacts.gradle" // sets up source and javadoc jar uploads
 
 defaultTasks 'classes'
 
 repositories {
     mavenCentral()
-    mavenRepo name: "jboss", urls: "http://repository.jboss.org/maven2/"
-    mavenRepo urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
+    mavenRepo name: "jboss", urls: "https://repository.jboss.org/nexus/content/groups/public/"
+    mavenRepo name: "mavenCache", urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
 }
 
-//configurations {
-//    deployerJars
-//}
+configurations {
+    deployerJars
+}
 
 dependencies {
     slf4jVersion = '1.5.8'
@@ -46,16 +47,19 @@ dependencies {
             [group: 'org.slf4j', name: 'jcl-over-slf4j', version: slf4jVersion],
             [group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion]
     )
-//    deployerJars "org.apache.maven.wagon:wagon-webdav:1.0-beta-2"
+    deployerJars "org.apache.maven.wagon:wagon-http:1.0-beta-6"
 }
 
 group = 'org.jboss.jdocbook'
+// until http://jira.codehaus.org/browse/GRADLE-338 is resolved the recommended approach
+// for supplying an explicit project name is settings.gradle
+//configure(install.repositories.mavenInstaller){
+//	pom.project {
+//		artifactId 'jdocbook-core'
+//	}
+//}
 version = '1.0.0-SNAPSHOT'
-configure(install.repositories.mavenInstaller){
-	pom.project {
-		artifactId 'jdocbook-core'
-	}
-}
+
 manifest.mainAttributes(
     provider: 'gradle',
     'Implementation-Url': 'http://jboss.org',
@@ -63,13 +67,39 @@ manifest.mainAttributes(
     'Implementation-Vendor': 'JBoss.org',
     'Implementation-Vendor-Id': 'org.jboss'
 )
-//
-//uploadArchives {
-//    repositories.mavenDeployer {
-//        name = 'jbossDeployer'
-//        configuration = configurations.deployerJars
-//        snapshotRepository(url: "dav:https://snapshots.jboss.org/maven2") {
-//            authentication(userName: , password: "myPassword")
-//        }
-//    }
-//}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task sourcesJar(type: Jar, dependsOn: compileJava) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+if ( ! hasProperty('MY_JBOSS_USER') ) {
+    MY_JBOSS_USER = "";
+}
+if ( ! hasProperty('MY_JBOSS_PASS') ) {
+    MY_JBOSS_PASS = "";
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        name = 'jbossDeployer'
+        configuration = configurations.deployerJars
+        credentials = [userName: MY_JBOSS_USER, password: MY_JBOSS_PASS]
+        repository(url: "https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/") {
+            authentication(credentials)
+        }
+        snapshotRepository(url: "https://repository.jboss.org/nexus/content/repositories/snapshots/") {
+            authentication(credentials)
+        }
+    }
+}
