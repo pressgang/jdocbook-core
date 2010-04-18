@@ -26,7 +26,8 @@ package org.jboss.jdocbook.render;
 import java.io.File;
 
 import org.jboss.jdocbook.util.FileUtils;
-import org.jboss.jdocbook.util.StandardDocBookFormatMetadata;
+import static org.jboss.jdocbook.util.StandardDocBookFormatMetadata.getFormatMetadata;
+import static org.jboss.jdocbook.util.StandardDocBookFormatMetadata.FormatMetadata;
 import org.jboss.jdocbook.util.TargetNamingStrategy;
 import org.jboss.jdocbook.xslt.FormatPlan;
 
@@ -38,15 +39,14 @@ import org.jboss.jdocbook.xslt.FormatPlan;
 public class FormatPlanBuilder {
 	/**
 	 * Build a {@link FormatPlan} given a set of user {@link FormatOptions}.  Basically we merge the
-	 * {@link FormatOptions} with the corresponding {@link StandardDocBookFormatMetadata.FormatMetadata}.
+	 * {@link FormatOptions} with the corresponding {@link FormatMetadata}.
 	 *
 	 * @param formatOptions The user format options
 	 *
 	 * @return The format plan.
 	 */
 	public static FormatPlan buildFormatPlan(FormatOptions formatOptions) {
-		StandardDocBookFormatMetadata.FormatMetadata formatMetadata =
-				StandardDocBookFormatMetadata.getFormatMetadata( formatOptions.getName() );
+		FormatMetadata formatMetadata = getFormatMetadata( formatOptions.getName() );
 		if ( formatMetadata == null ) {
 			throw new RenderingException( "Unknown format name " + formatOptions.getName() );
 		}
@@ -55,11 +55,11 @@ public class FormatPlanBuilder {
 	}
 
 	private static class FormatPlanImpl implements FormatPlan {
-		private final StandardDocBookFormatMetadata.FormatMetadata formatMetadata;
+		private final FormatMetadata formatMetadata;
 		private final FormatOptions formatOptions;
 		private final TargetNamingStrategyImpl targetNamingStrategy = new TargetNamingStrategyImpl();
 
-		private FormatPlanImpl(StandardDocBookFormatMetadata.FormatMetadata formatMetadata, FormatOptions formatOptions) {
+		private FormatPlanImpl(FormatMetadata formatMetadata, FormatOptions formatOptions) {
 			this.formatMetadata = formatMetadata;
 			this.formatOptions = formatOptions;
 		}
