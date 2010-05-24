@@ -49,13 +49,31 @@ public class RelativeJarUriResolver implements URIResolver {
 			return null;
 		}
 
-		String fullHref = base.substring( 4, base.lastIndexOf( '/' ) + 1 ) + href;
+		// I have had a few different experiences attempting to load relative jar urls in different
+		// environments.  Sometimes this seems to require the full protocol to be "jar:file://".  Other
+		// times "jar:file://" causes resolution problems and it needs to be just "file://"/
+		//
+		// This is certainly not my bag and no clue which is right (if either are).  So here we just try a
+		// few variations
+
 		try {
+			// try the "jar:file://" form
+			final String fullHref = base.substring( 0, base.lastIndexOf( '/' ) + 1 ) + href;
 			URL url = new URL( fullHref );
 			return new StreamSource( url.openStream(), url.toExternalForm() );
 		}
-		catch ( Throwable t ) {
-			return null;
+		catch ( Throwable ignore ) {
 		}
+
+		// try the "file://" form
+		try {
+			final String fullHref = base.substring( 4, base.lastIndexOf( '/' ) + 1 ) + href;
+			URL url = new URL( fullHref );
+			return new StreamSource( url.openStream(), url.toExternalForm() );
+		}
+		catch ( Throwable ignore ) {
+		}
+
+		return null;
 	}
 }

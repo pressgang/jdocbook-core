@@ -56,26 +56,28 @@ import org.xml.sax.Attributes;
  */
 public class TransformerBuilderImpl implements TransformerBuilder {
 	private final JDocBookComponentRegistry componentRegistry;
-	private final CatalogResolver catalogResolver;
 
 	public TransformerBuilderImpl(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
-
-		final CatalogManager catalogManager;
-		if ( componentRegistry.getConfiguration().getCatalogs() == null
-				|| componentRegistry.getConfiguration().getCatalogs().size() == 0 ) {
-			catalogManager = new ImplicitCatalogManager();
-		}
-		else {
-			catalogManager = new ExplicitCatalogManager( componentRegistry.getConfiguration().getCatalogs() );
-		}
-		catalogResolver = new CatalogResolver( catalogManager );
 	}
+
+	private CatalogResolver catalogResolver;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public CatalogResolver getCatalogResolver() {
+		if ( catalogResolver == null ) {
+			final CatalogManager catalogManager;
+			if ( componentRegistry.getConfiguration().getCatalogs() == null
+					|| componentRegistry.getConfiguration().getCatalogs().size() == 0 ) {
+				catalogManager = new ImplicitCatalogManager();
+			}
+			else {
+				catalogManager = new ExplicitCatalogManager( componentRegistry.getConfiguration().getCatalogs() );
+			}
+			catalogResolver = new CatalogResolver( catalogManager );
+		}
 		return catalogResolver;
 	}
 
@@ -115,10 +117,10 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 
 	private void applyStandardResolvers(ResolverChain resolverChain) {
 		// See https://jira.jboss.org/jira/browse/MPJDOCBOOK-49
-		resolverChain.addResolver( new CurrentVersionResolver( componentRegistry ) );
+		resolverChain.addResolver( new VersionResolver( componentRegistry ) );
 		resolverChain.addResolver( new RelativeJarUriResolver() );
 		resolverChain.addResolver( new ClasspathResolver( componentRegistry ) );
-		resolverChain.addResolver( catalogResolver );
+		resolverChain.addResolver( getCatalogResolver() );
 	}
 
 	/**
@@ -149,8 +151,6 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 				transformerTemplatesCache.put( xsltUrlStr, transformerTemplates );
 			}
 			transformer = transformerTemplates.newTransformer();
-//			Source source = new StreamSource( xslt.openStream(), xsltUrlStr );
-//			transformer = transformerFactory.newTransformer( source );
 		}
 		catch ( IOException e ) {
 			throw new XSLTException( "problem opening stylesheet [" + xsltUrlStr + "]", e );

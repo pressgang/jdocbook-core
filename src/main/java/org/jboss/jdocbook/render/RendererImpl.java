@@ -58,13 +58,20 @@ public class RendererImpl implements Renderer {
 	private static final Logger log = LoggerFactory.getLogger( RendererImpl.class );
 
 	private final JDocBookComponentRegistry componentRegistry;
-	private final EntityResolverChain entityResolver;
 
 	public RendererImpl(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
-		entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
-		entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
-		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
+	}
+
+	private EntityResolverChain entityResolver;
+
+	private EntityResolverChain getEntityResolver() {
+		if ( entityResolver == null ) {
+			entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
+			entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
+			entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
+		}
+		return entityResolver;
 	}
 
 	/**
@@ -215,7 +222,7 @@ public class RendererImpl implements Renderer {
 	protected Source buildSource(File sourceFile) throws RenderingException {
 		return FileUtils.createSAXSource(
 			sourceFile,
-			entityResolver,
+			getEntityResolver(),
 			componentRegistry.getConfiguration().getValueInjections()
 		);
 	}

@@ -32,7 +32,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 
 import org.jboss.jdocbook.Configuration;
-import org.jboss.jdocbook.Environment;
 import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.util.Constants;
 import org.jboss.jdocbook.util.FileUtils;
@@ -54,17 +53,20 @@ public class ProfilerImpl implements Profiler {
 	private static final Logger log = LoggerFactory.getLogger( ProfilerImpl.class );
 
 	private final JDocBookComponentRegistry componentRegistry;
-	private final EntityResolverChain entityResolver;
 
 	public ProfilerImpl(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
-		entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
-		entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
-		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
 	}
 
-	protected Environment environment() {
-		return componentRegistry.getEnvironment();
+	private EntityResolverChain entityResolver;
+
+	private EntityResolverChain getEntityResolver() {
+		if ( entityResolver == null ) {
+			entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
+			entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
+			entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
+		}
+		return entityResolver;
 	}
 
 	private Configuration configuration() {
@@ -114,7 +116,7 @@ public class ProfilerImpl implements Profiler {
 	}
 
 	private Source buildSource(File sourceFile) throws XSLTException {
-		return FileUtils.createSAXSource( sourceFile, entityResolver, configuration().getValueInjections() );
+		return FileUtils.createSAXSource( sourceFile, getEntityResolver(), configuration().getValueInjections() );
 	}
 
 	protected Result buildResult(File targetFile) throws XSLTException {

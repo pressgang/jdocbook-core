@@ -88,4 +88,8 @@ public interface Configuration {
 	 * @return The profiling configuration.
 	 */
 	public Profiling getProfiling();
+
+	public boolean isMatchAllVersionsForResourceResolution();
+
+	public String[] getVersionsForResourceResolution();
 }
