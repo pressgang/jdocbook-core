@@ -115,7 +115,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 
 	private void applyStandardResolvers(ResolverChain resolverChain) {
 		// See https://jira.jboss.org/jira/browse/MPJDOCBOOK-49
-		resolverChain.addResolver( new CurrentVersionResolver( componentRegistry ) );
+		resolverChain.addResolver( new VersionResolver( componentRegistry ) );
 		resolverChain.addResolver( new RelativeJarUriResolver() );
 		resolverChain.addResolver( new ClasspathResolver( componentRegistry ) );
 		resolverChain.addResolver( catalogResolver );
@@ -165,7 +165,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 
 	private SAXTransformerFactory buildSAXTransformerFactory() {
 		com.icl.saxon.TransformerFactoryImpl factoryImpl = new com.icl.saxon.TransformerFactoryImpl();
-		factoryImpl.setAttribute( "http://icl.com/saxon/feature/messageEmitterClass", SaxonXslMessageEmitter.class.getName() );
+		//factoryImpl.setAttribute( "http://icl.com/saxon/feature/messageEmitterClass", SaxonXslMessageEmitter.class.getName() );
 		return factoryImpl;
 	}
 
