@@ -49,7 +49,6 @@ public class VersionResolver implements URIResolver {
 	 * Constructs a VersionResolver instance using the given <tt>version</tt>.
 	 *
 	 * @param componentRegistry The execution environment
-	 * @param version The version.
 	 */
 	public VersionResolver( JDocBookComponentRegistry componentRegistry ) {
 		this.componentRegistry = componentRegistry;
