@@ -40,7 +40,8 @@ dependencies {
             [group: 'org.apache.xmlgraphics', name: 'xmlgraphics-commons', version: 'fop-'+fopVersion],
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-api', version: avalonVersion],
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-impl', version: avalonVersion],
-            [group: 'jdom', name: 'jdom', version: jdomVersion]
+            [group: 'jdom', name: 'jdom', version: jdomVersion],
+			[group: 'net.sf.docbook', name: 'docbook', version: '1.72.0']
     )
     testCompile(
             [group: 'junit', name: 'junit', version: junitVersion],

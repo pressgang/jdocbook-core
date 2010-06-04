@@ -56,28 +56,26 @@ import org.xml.sax.Attributes;
  */
 public class TransformerBuilderImpl implements TransformerBuilder {
 	private final JDocBookComponentRegistry componentRegistry;
+	private final CatalogResolver catalogResolver;
 
 	public TransformerBuilderImpl(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
-	}
 
-	private CatalogResolver catalogResolver;
+		final CatalogManager catalogManager;
+		if ( componentRegistry.getConfiguration().getCatalogs() == null
+				|| componentRegistry.getConfiguration().getCatalogs().size() == 0 ) {
+			catalogManager = new ImplicitCatalogManager();
+		}
+		else {
+			catalogManager = new ExplicitCatalogManager( componentRegistry.getConfiguration().getCatalogs() );
+		}
+		catalogResolver = new CatalogResolver( catalogManager );
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public CatalogResolver getCatalogResolver() {
-		if ( catalogResolver == null ) {
-			final CatalogManager catalogManager;
-			if ( componentRegistry.getConfiguration().getCatalogs() == null
-					|| componentRegistry.getConfiguration().getCatalogs().size() == 0 ) {
-				catalogManager = new ImplicitCatalogManager();
-			}
-			else {
-				catalogManager = new ExplicitCatalogManager( componentRegistry.getConfiguration().getCatalogs() );
-			}
-			catalogResolver = new CatalogResolver( catalogManager );
-		}
 		return catalogResolver;
 	}
 
@@ -120,7 +118,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		resolverChain.addResolver( new VersionResolver( componentRegistry ) );
 		resolverChain.addResolver( new RelativeJarUriResolver() );
 		resolverChain.addResolver( new ClasspathResolver( componentRegistry ) );
-		resolverChain.addResolver( getCatalogResolver() );
+		resolverChain.addResolver( catalogResolver );
 	}
 
 	/**
@@ -151,6 +149,8 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 				transformerTemplatesCache.put( xsltUrlStr, transformerTemplates );
 			}
 			transformer = transformerTemplates.newTransformer();
+//			Source source = new StreamSource( xslt.openStream(), xsltUrlStr );
+//			transformer = transformerFactory.newTransformer( source );
 		}
 		catch ( IOException e ) {
 			throw new XSLTException( "problem opening stylesheet [" + xsltUrlStr + "]", e );
@@ -165,7 +165,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 
 	private SAXTransformerFactory buildSAXTransformerFactory() {
 		com.icl.saxon.TransformerFactoryImpl factoryImpl = new com.icl.saxon.TransformerFactoryImpl();
-		factoryImpl.setAttribute( "http://icl.com/saxon/feature/messageEmitterClass", SaxonXslMessageEmitter.class.getName() );
+		//factoryImpl.setAttribute( "http://icl.com/saxon/feature/messageEmitterClass", SaxonXslMessageEmitter.class.getName() );
 		return factoryImpl;
 	}
 

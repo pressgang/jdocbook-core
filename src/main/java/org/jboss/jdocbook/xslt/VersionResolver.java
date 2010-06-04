@@ -42,58 +42,37 @@ public class VersionResolver implements URIResolver {
 	public static final String BASE_HREF = "http://docbook.sourceforge.net/release/xsl/";
 
 	private JDocBookComponentRegistry componentRegistry;
+	private final String version;
+	private final String versionHref;
 
 	/**
 	 * Constructs a VersionResolver instance using the given <tt>version</tt>.
 	 *
 	 * @param componentRegistry The execution environment
+	 * @param version The version.
 	 */
-	public VersionResolver(JDocBookComponentRegistry componentRegistry) {
+	public VersionResolver( JDocBookComponentRegistry componentRegistry ) {
 		this.componentRegistry = componentRegistry;
+		this.version = componentRegistry.getConfiguration().getDocBookVersion() == null ? "current"
+				: componentRegistry.getConfiguration().getDocBookVersion();
+		this.versionHref = BASE_HREF + version;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Source resolve(String href, String base) throws TransformerException {
-		final UrlParts urlParts;
-		if ( href.startsWith( BASE_HREF ) ) {
-			urlParts = new UrlParts( href );
+		if ( href.startsWith( versionHref ) ) {
+			return resolve( href );
 		}
-		else if ( base.startsWith( BASE_HREF ) ) {
-			urlParts = new UrlParts(  base + "/" + href );
+		else if ( base.startsWith( versionHref ) ) {
+			return resolve( base + "/" + href );
 		}
-		else {
-			return null;
-		}
-
-		if ( isMatch( urlParts.version ) ) {
-			return resolve( urlParts.resource );
-		}
-
 		return null;
 	}
 
-	private boolean isMatch(String version) {
-		if ( componentRegistry.getConfiguration().isMatchAllVersionsForResourceResolution() ) {
-			return true;
-		}
-		else {
-			final String[] matches = componentRegistry.getConfiguration().getVersionsForResourceResolution();
-			if ( matches == null ) {
-				return false;
-			}
-			for ( String match : matches ) {
-				if ( match.equals( version ) ) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-
-
-	private Source resolve(String resource) {
+	private Source resolve(String href) {
+		String resource = href.substring( versionHref.length() );
 		try {
 			URL resourceURL = componentRegistry.getEnvironment().getResourceDelegate().requireResource( resource );
 			return new StreamSource( resourceURL.openStream(), resourceURL.toExternalForm() );
@@ -106,23 +85,10 @@ public class VersionResolver implements URIResolver {
 		}
 	}
 
-	private static class UrlParts {
-		private String version;
-		private String resource;
-
-		private UrlParts(String urlString) {
-			final String partsWeCareAbout = urlString.substring( BASE_HREF.length() );
-			final int versionDelimiterPosition = partsWeCareAbout.indexOf( '/' );
-			this.version = partsWeCareAbout.substring( 0, versionDelimiterPosition );
-			this.resource = partsWeCareAbout.substring( versionDelimiterPosition + 1, partsWeCareAbout.length() );
-		}
-
-		@Override
-		public String toString() {
-			return "UrlParts{" +
-					"version='" + version + '\'' +
-					", resource='" + resource + '\'' +
-					'}';
-		}
+	/**
+	 * {@inheritDoc}
+	 */
+	public String toString() {
+		return super.toString() + " [version=" + version + "]";
 	}
 }
