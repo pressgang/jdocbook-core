@@ -30,6 +30,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jboss.jdocbook.Environment;
 import org.jboss.jdocbook.JDocBookComponentRegistry;
 
 /**
@@ -40,40 +41,71 @@ import org.jboss.jdocbook.JDocBookComponentRegistry;
  */
 public class VersionResolver implements URIResolver {
 	public static final String BASE_HREF = "http://docbook.sourceforge.net/release/xsl/";
+	public static final int BASE_HREF_LEN = BASE_HREF.length();
 
-	private JDocBookComponentRegistry componentRegistry;
-	private final String version;
-	private final String versionHref;
+	private final JDocBookComponentRegistry componentRegistry;
+	private final VersionMatcher versionMatcher;
 
 	/**
 	 * Constructs a VersionResolver instance using the given <tt>version</tt>.
 	 *
 	 * @param componentRegistry The execution environment
 	 */
-	public VersionResolver( JDocBookComponentRegistry componentRegistry ) {
+	public VersionResolver(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
-		this.version = componentRegistry.getConfiguration().getDocBookVersion() == null ? "current"
-				: componentRegistry.getConfiguration().getDocBookVersion();
-		this.versionHref = BASE_HREF + version;
+		if ( Environment.DocBookXsltResolutionStrategy.INCLUSIVE == componentRegistry.getEnvironment().getDocBookXsltResolutionStrategy() ) {
+			versionMatcher = new VersionMatcher() {
+				public boolean matched(String version) {
+					return true;
+				}
+				public String toString() {
+					return "inclusive";
+				}
+			};
+		}
+		else {
+			final String versionToMatch = componentRegistry.getConfiguration().getDocBookVersion() == null
+					? "current"
+					: componentRegistry.getConfiguration().getDocBookVersion();
+			versionMatcher = new VersionMatcher() {
+				public boolean matched(String version) {
+					return versionToMatch.equals( version );
+				}
+				public String toString() {
+					return "[versionToMatch=" + versionToMatch + "]";
+				}
+			};
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Source resolve(String href, String base) throws TransformerException {
-		if ( href.startsWith( versionHref ) ) {
-			return resolve( href );
+		if ( href.startsWith( BASE_HREF ) ) {
+			final int versionEndTokenPosition = href.indexOf( '/', BASE_HREF_LEN );
+			final String version = href.substring( BASE_HREF_LEN, versionEndTokenPosition );
+			if ( versionMatcher.matched( version ) ) {
+				final String name = href.substring( versionEndTokenPosition + 1 );
+				return resolveLocally( name );
+			}
 		}
-		else if ( base.startsWith( versionHref ) ) {
-			return resolve( base + "/" + href );
+
+		if ( base.startsWith( BASE_HREF ) ) {
+			final int versionEndTokenPosition = base.indexOf( '/', BASE_HREF_LEN );
+			final String version = base.substring( BASE_HREF_LEN, versionEndTokenPosition );
+			if ( versionMatcher.matched( version ) ) {
+				final String remainingBase = base.substring( versionEndTokenPosition + 1 );
+				return resolveLocally( remainingBase + '/' + href );
+			}
 		}
+
 		return null;
 	}
 
-	private Source resolve(String href) {
-		String resource = href.substring( versionHref.length() );
+	private Source resolveLocally(String resourceName) {
 		try {
-			URL resourceURL = componentRegistry.getEnvironment().getResourceDelegate().requireResource( resource );
+			URL resourceURL = componentRegistry.getEnvironment().getResourceDelegate().requireResource( resourceName );
 			return new StreamSource( resourceURL.openStream(), resourceURL.toExternalForm() );
 		}
 		catch ( IllegalArgumentException e ) {
@@ -88,6 +120,10 @@ public class VersionResolver implements URIResolver {
 	 * {@inheritDoc}
 	 */
 	public String toString() {
-		return super.toString() + " [version=" + version + "]";
+		return super.toString() + " [versionMatcher=" + versionMatcher + "]";
+	}
+
+	private static interface VersionMatcher {
+		public boolean matched(String version);
 	}
 }

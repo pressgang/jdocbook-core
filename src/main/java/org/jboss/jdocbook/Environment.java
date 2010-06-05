@@ -68,4 +68,28 @@ public interface Environment {
 	 * @return Font directories.
 	 */
 	public List<File> getFontDirectories();
+
+	/**
+	 * Indicates how to handle resolution of URIs naming DocBook XSLT in terms of version.
+	 *
+	 * @see org.jboss.jdocbook.xslt.VersionResolver
+	 */
+	public static enum DocBookXsltResolutionStrategy {
+		/**
+		 * Any version should be considered a match
+		 */
+		INCLUSIVE,
+		/**
+		 * Only named versions (named via {@link Configuration#getDocBookVersion()} should be matched
+		 */
+		NAMED
+	}
+
+	/**
+	 * Retrieve the strategy this environment would like used for resolving DocBook XSLT URIs
+	 *
+	 * @return The environment preferred strategy
+	 */
+	public DocBookXsltResolutionStrategy getDocBookXsltResolutionStrategy();
+
 }
