@@ -23,12 +23,14 @@
  */
 package org.jboss.jdocbook.render;
 
+import java.io.Serializable;
+
 /**
  * Describes certain user specified options in regard to a particular
  *
  * @author Steve Ebersole
  */
-public interface FormatOptions {
+public interface FormatOptions extends Serializable {
 	/**
 	 * Retrieve the format name.  Should match with a standard DocBook format.
 	 *

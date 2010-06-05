@@ -76,49 +76,58 @@ public class StandardDocBookFormatMetadata {
 		public boolean doesChunking();
 	}
 
-	public static final FormatMetadata PDF = new BasicFormatMetadata(
-			"pdf",  "/fo/docbook.xsl", "pdf", true, false, false
-	);
+	public static final FormatMetadata PDF = new BasicFormatMetadata( "pdf" )
+			.setStylesheetResource( "/fo/docbook.xsl" )
+			.setFileExtension( "pdf" )
+			.setRequiresImagePathSetting( true )
+			.setRequiresImageCopying( false )
+			.setDoesChunking( false );
 
-	public static final FormatMetadata XHTML = new BasicFormatMetadata(
-			"xhtml", "/xhtml/docbook.xsl", "xhtml", false, true, false
-	);
+	public static final FormatMetadata XHTML = new BasicFormatMetadata( "xhtml" )
+			.setStylesheetResource( "/xhtml/docbook.xsl" )
+			.setFileExtension( "xhtml" )
+			.setRequiresImagePathSetting( false )
+			.setRequiresImageCopying( true )
+			.setDoesChunking( false );
 
-	public static final FormatMetadata ECLIPSE = new HtmlBasedFormatMetadata( "eclipse", "/eclipse/eclipse.xsl" );
+	public static final FormatMetadata ECLIPSE = new HtmlBasedFormatMetadata( "eclipse" )
+			.setStylesheetResource( "/eclipse/eclipse.xsl" );
 
-	public static final FormatMetadata HTML = new HtmlBasedFormatMetadata( "html", "/html/chunk.xsl" );
+	public static final FormatMetadata HTML = new HtmlBasedFormatMetadata( "html" )
+			.setStylesheetResource( "/html/chunk.xsl" );
 
-	public static final FormatMetadata HTML_SINGLE = new HtmlBasedFormatMetadata( "html_single", "/html/docbook.xsl", false );
+	public static final FormatMetadata HTML_SINGLE = new HtmlBasedFormatMetadata( "html_single" )
+			.setStylesheetResource( "/html/docbook.xsl" )
+			.setDoesChunking( false );
 
-	public static final FormatMetadata HTMLHELP = new HtmlBasedFormatMetadata( "htmlhelp", "/htmlhelp/htmlhelp.xsl" );
+	public static final FormatMetadata HTMLHELP = new HtmlBasedFormatMetadata( "htmlhelp" )
+			.setStylesheetResource( "/htmlhelp/htmlhelp.xsl" );
 
-	public static final FormatMetadata JAVAHELP = new HtmlBasedFormatMetadata( "javahelp", "/javahelp/javahelp.xsl" );
+	public static final FormatMetadata JAVAHELP = new HtmlBasedFormatMetadata( "javahelp" )
+			.setStylesheetResource( "/javahelp/javahelp.xsl" );
 
-	public static final FormatMetadata MAN = new HtmlBasedFormatMetadata( "man", "/manpages/docbook.xsl", false );
+	public static final FormatMetadata MAN = new HtmlBasedFormatMetadata( "man" )
+			.setStylesheetResource( "/manpages/docbook.xsl" )
+			.setDoesChunking( false );
 
-	public static final FormatMetadata WEBSITE = new HtmlBasedFormatMetadata( "website", "/website/website.xsl", false );
+	public static final FormatMetadata WEBSITE = new HtmlBasedFormatMetadata( "website" )
+			.setStylesheetResource( "/website/website.xsl" )
+			.setDoesChunking( false );
+
 
 	private static class BasicFormatMetadata implements FormatMetadata {
 		private final String name;
-		private final String stylesheetResource;
-		private final String fileExtension;
-		private final boolean requiresImagePathSetting;
-		private final boolean requiresImageCopying;
-		private final boolean doesChunking;
+		private String stylesheetResource;
+		private String fileExtension;
+		private boolean requiresImagePathSetting;
+		private boolean requiresImageCopying;
+		private boolean doesChunking;
 
-		private BasicFormatMetadata(
-				String name,
-				String stylesheetResource,
-				String fileExtension,
-				boolean requiresImagePathSetting,
-				boolean requiresImageCopying,
-				boolean doesChunking) {
+		private BasicFormatMetadata(String name) {
 			this.name = name;
-			this.stylesheetResource = stylesheetResource;
-			this.fileExtension = fileExtension;
-			this.requiresImagePathSetting = requiresImagePathSetting;
-			this.requiresImageCopying = requiresImageCopying;
-			this.doesChunking = doesChunking;
+// I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
+// and I do not think there is really a danger in setting it
+			this.requiresImagePathSetting = true;
 		}
 
 		public String getName() {
@@ -144,23 +153,42 @@ public class StandardDocBookFormatMetadata {
 		public boolean doesChunking() {
 			return doesChunking;
 		}
+
+		BasicFormatMetadata setStylesheetResource(String stylesheetResource) {
+			this.stylesheetResource = stylesheetResource;
+			return this;
+		}
+
+		BasicFormatMetadata setFileExtension(String fileExtension) {
+			this.fileExtension = fileExtension;
+			return this;
+		}
+
+		BasicFormatMetadata setRequiresImagePathSetting(boolean requiresImagePathSetting) {
+			this.requiresImagePathSetting = requiresImagePathSetting;
+			return this;
+		}
+
+		BasicFormatMetadata setRequiresImageCopying(boolean requiresImageCopying) {
+			this.requiresImageCopying = requiresImageCopying;
+			return this;
+		}
+
+		BasicFormatMetadata setDoesChunking(boolean doesChunking) {
+			this.doesChunking = doesChunking;
+			return this;
+		}
 	}
 
 	private static class HtmlBasedFormatMetadata extends BasicFormatMetadata {
-		private HtmlBasedFormatMetadata(String name, String stylesheetResource) {
-			this( name, stylesheetResource, true );
-		}
-
-		private HtmlBasedFormatMetadata(String name, String stylesheetResource, boolean doesChunking) {
-			this( name, stylesheetResource, "html", doesChunking );
-		}
-
-		private HtmlBasedFormatMetadata(
-				String name,
-				String stylesheetResource,
-				String fileExtension,
-				boolean doesChunking) {
-			super( name, stylesheetResource, fileExtension, false, true, doesChunking );
+		private HtmlBasedFormatMetadata(String name) {
+			super( name );
+			setDoesChunking( true );
+			setFileExtension( "html" );
+// I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
+// and I do not think there is really a danger in setting it
+//			setRequiresImagePathSetting( false );
+			setRequiresImageCopying( true );
 		}
 	}
 

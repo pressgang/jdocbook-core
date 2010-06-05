@@ -88,5 +88,11 @@ public interface Configuration {
 	 * @return The profiling configuration.
 	 */
 	public Profiling getProfiling();
+
+	/**
+	 * Retrieve the DocBook version string to look for in locally resolving DocBook resources.
+	 *
+	 * @return The DocBook version to look from in URL strings for local resolution.
+	 */
 	public String getDocBookVersion();
 }

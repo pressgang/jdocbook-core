@@ -23,13 +23,15 @@
  */
 package org.jboss.jdocbook;
 
+import java.io.Serializable;
+
 /**
  * Descriptor of the profiling to be applied.
  *
  * @author Steve Ebersole
  */
 @SuppressWarnings({ "UnusedDeclaration" })
-public class Profiling {
+public class Profiling implements Serializable{
 	private boolean enabled;
 	private String attributeName;
 	private String attributeValue;
@@ -80,5 +82,39 @@ public class Profiling {
 
 	public void setAttributeValue(String attributeValue) {
 		this.attributeValue = attributeValue;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if ( this == o ) {
+			return true;
+		}
+		if ( o == null || getClass() != o.getClass() ) {
+			return false;
+		}
+
+		Profiling profiling = (Profiling) o;
+
+		if ( enabled != profiling.enabled ) {
+			return false;
+		}
+
+		//noinspection SimplifiableIfStatement
+		if ( !enabled ) {
+			// 2 disabled profiles are the same
+			return true;
+		}
+
+		return !( attributeName != null ? !attributeName.equals( profiling.attributeName ) : profiling.attributeName != null )
+				&& !( attributeValue != null ? !attributeValue.equals( profiling.attributeValue ) : profiling.attributeValue != null );
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = ( enabled ? 1 : 0 );
+		result = 31 * result + ( attributeName != null ? attributeName.hashCode() : 0 );
+		result = 31 * result + ( attributeValue != null ? attributeValue.hashCode() : 0 );
+		return result;
 	}
 }
