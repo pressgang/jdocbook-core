@@ -18,6 +18,11 @@ public class BaseEnvironment implements Environment, Constant {
 	}
 
 	@Override
+	public DocBookXsltResolutionStrategy getDocBookXsltResolutionStrategy() {
+		return DocBookXsltResolutionStrategy.INCLUSIVE;
+	}
+
+	@Override
 	public MasterLanguageDescriptor getMasterLanguageDescriptor() {
 		return new BaseMasterLanguateDescriptor();
 	}
