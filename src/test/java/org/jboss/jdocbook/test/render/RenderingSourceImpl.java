@@ -14,22 +14,18 @@ public class RenderingSourceImpl implements RenderingSource, Constant {
 		this.resolveSourceDoctument=resolveSourceDoctument;
 	}
 
-	@Override
 	public Locale getLanguage() {
 		return lang;
 	}
 
-	@Override
 	public File getXslFoDirectory() {
 		return null;
 	}
 
-	@Override
 	public File resolvePublishingBaseDirectory() {
 		return new File( PUBLISH_DIR, getLanguage().toString() );
 	}
 
-	@Override
 	public File resolveSourceDocument() {
 		return resolveSourceDoctument;
 	}

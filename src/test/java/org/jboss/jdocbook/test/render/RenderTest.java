@@ -1,16 +1,9 @@
 package org.jboss.jdocbook.test.render;
 
 import java.io.File;
-import java.util.LinkedHashSet;
 import java.util.Locale;
-import java.util.Properties;
 
-import org.jboss.jdocbook.Configuration;
-import org.jboss.jdocbook.Environment;
-import org.jboss.jdocbook.Profiling;
-import org.jboss.jdocbook.ValueInjection;
 import org.jboss.jdocbook.test.AbstractJDocBookTest;
-import org.jboss.jdocbook.test.Constant;
 import org.jboss.jdocbook.translate.TranslationSource;
 
 /**
@@ -63,17 +56,14 @@ public class RenderTest extends AbstractJDocBookTest {
 			this.resolveTranslatedXmlDirectory = resolveTranslatedXmlDirectory;
 		}
 
-		@Override
 		public Locale getLanguage() {
 			return lang;
 		}
 
-		@Override
 		public File resolvePoDirectory() {
 			return resolvePoDirectory;
 		}
 
-		@Override
 		public File resolveTranslatedXmlDirectory() {
 			return resolveTranslatedXmlDirectory;
 		}

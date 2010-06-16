@@ -10,34 +10,28 @@ import org.jboss.jdocbook.ResourceDelegate;
 
 public class BaseEnvironment implements Environment, Constant {
 
-	@Override
 	public List<File> getFontDirectories() {
 		List<File> list=new ArrayList<File>();
 		list.add(new File( STAGING_DIR,"fonts" ));
 		return list;
 	}
 
-	@Override
 	public DocBookXsltResolutionStrategy getDocBookXsltResolutionStrategy() {
 		return DocBookXsltResolutionStrategy.INCLUSIVE;
 	}
 
-	@Override
 	public MasterLanguageDescriptor getMasterLanguageDescriptor() {
-		return new BaseMasterLanguateDescriptor();
+		return new BaseMasterLanguageDescriptor();
 	}
 
-	@Override
 	public ResourceDelegate getResourceDelegate() {
 		return new BaseResourceDelegate();
 	}
 
-	@Override
 	public File getStagingDirectory() {
 		return STAGING_DIR;
 	}
 
-	@Override
 	public File getWorkDirectory() {
 		return WORK_DIR;
 	}
