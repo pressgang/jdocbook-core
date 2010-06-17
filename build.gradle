@@ -63,14 +63,7 @@ dependencies {
 }
 
 group = 'org.jboss.jdocbook'
-// until http://jira.codehaus.org/browse/GRADLE-338 is resolved the recommended approach
-// for supplying an explicit project name is settings.gradle
-//configure(install.repositories.mavenInstaller){
-//	pom.project {
-//		artifactId 'jdocbook-core'
-//	}
-//}
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 
 manifest.mainAttributes(
     provider: 'gradle',
