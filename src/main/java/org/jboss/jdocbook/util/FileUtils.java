@@ -90,9 +90,18 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 
 	}
 
-	public static InputSource createInputSource(
-			File file,
-			final LinkedHashSet<ValueInjection> valueInjections) throws SAXException {
+	public static InputSource createInputSource(File file, final LinkedHashSet<ValueInjection> valueInjections) {
+		try {
+			InputSource source = new InputSource( createInputStream( file, valueInjections ) );
+			source.setSystemId( file.toURI().toURL().toString() );
+			return source;
+		}
+		catch ( MalformedURLException e ) {
+			throw new JDocBookProcessException( "unexpected problem converting file to URL", e );
+		}
+	}
+
+	public static InputStream createInputStream(File file, final LinkedHashSet<ValueInjection> valueInjections) {
 		final boolean injectionsDefined = valueInjections != null && ! valueInjections.isEmpty();
 		try {
 			InputStream inputStream = new BufferedInputStream( new FileInputStream( file ) );
@@ -105,8 +114,7 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 								final String pubId = doctype == null ? null : doctype.getPublicId();
 								final String sysId = doctype == null ? null : doctype.getSystemId();
 
-								StringBuffer internalSubset = new StringBuffer();
-								buildInjectedInternalEntitySubset( internalSubset, valueInjections );
+								StringBuilder internalSubset = buildInjectedEntitySubset( valueInjections );
 								if ( doctype != null && doctype.getInternalSubset() != null ) {
 									internalSubset.append( doctype.getInternalSubset() ).append( '\n' );
 								}
@@ -116,15 +124,10 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 				);
 				inputStream = changerStream;
 			}
-			InputSource source = new InputSource( inputStream );
-			source.setSystemId( file.toURI().toURL().toString() );
-			return source;
+			return inputStream;
 		}
 		catch ( FileNotFoundException e ) {
 			throw new JDocBookProcessException( "unable to locate source file", e );
-		}
-		catch ( MalformedURLException e ) {
-			throw new JDocBookProcessException( "unexpected problem converting file to URL", e );
 		}
 	}
 
@@ -178,7 +181,8 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 		return path.getAbsolutePath();
 	}
 
-	private static void buildInjectedInternalEntitySubset(StringBuffer buffer, Set<ValueInjection> valueInjections) {
+	public static StringBuilder buildInjectedEntitySubset(Set<ValueInjection> valueInjections) {
+		StringBuilder buffer = new StringBuilder();
 		for ( ValueInjection injection : valueInjections ) {
 			buffer.append( "<!ENTITY " )
 					.append( injection.getName() )
@@ -186,5 +190,6 @@ public class FileUtils extends org.codehaus.plexus.util.FileUtils {
 					.append( injection.getValue() )
 					.append( "\">\n" );
 		}
+		return buffer;
 	}
 }

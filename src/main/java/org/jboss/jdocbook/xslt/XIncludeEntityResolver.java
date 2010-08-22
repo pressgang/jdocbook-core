@@ -25,15 +25,19 @@ package org.jboss.jdocbook.xslt;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.LinkedHashSet;
 
 import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.ValueInjection;
 import org.jboss.jdocbook.util.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.ext.EntityResolver2;
 
 /**
  * An {@link EntityResolver} used to resolve XInclude files specifically to add
@@ -44,7 +48,9 @@ import org.xml.sax.SAXException;
  *
  * @author Steve Ebersole
  */
-public class XIncludeEntityResolver implements EntityResolver {
+public class XIncludeEntityResolver implements EntityResolver2 {
+	private static final Logger log = LoggerFactory.getLogger( XIncludeEntityResolver.class );
+
 	private final JDocBookComponentRegistry componentRegistry;
 
 	public XIncludeEntityResolver(JDocBookComponentRegistry componentRegistry) {
@@ -55,23 +61,55 @@ public class XIncludeEntityResolver implements EntityResolver {
 		return componentRegistry.getConfiguration().getValueInjections();
 	}
 
+	public InputSource getExternalSubset(String name, String baseURI) throws SAXException, IOException {
+		// IMPL NOTE: this is the form called when the document contains no external subset (or no DOCTYPE).
+		log.trace( "generating external subset; name=[{}]; baseURI=[{}]", name, baseURI );
+		LinkedHashSet<ValueInjection> injections = getValueInjections();
+		if ( injections == null || injections.isEmpty() ) {
+			log.trace( "No value injections defined; skipping" );
+			return null;
+		}
+		StringBuilder subset = FileUtils.buildInjectedEntitySubset( injections );
+		return new InputSource( new StringReader( subset.toString() ) );
+	}
+
+	public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId)
+			throws SAXException, IOException {
+		// IMPL NOTE: this is the form called when the document contains a DOCTYPE.
+		//		IMPORTANT : this form is actually called many times.  The scenario in which we are interested is where
+		//				systemId = "*.ent" which indicates attempt to resolve external entities; we need to prepend
+		//				any value injections
+		log.trace( "resolving entity; name=[" + name + "]; publicId=[" + publicId + "]; baseURI=[" + baseURI + "]; systemId=[" + systemId + "]" );
+		LinkedHashSet<ValueInjection> injections = getValueInjections();
+		if ( injections == null || injections.isEmpty() ) {
+			log.trace( "No value injections defined; skipping" );
+			return null;
+		}
+		if ( publicId == null && baseURI.startsWith( "file:" ) && systemId.trim().endsWith( ".ent" ) ) {
+			File baseFile = new File( new URL( baseURI ).getFile() );
+			if ( baseFile.exists() ) {
+				InputSource inputSource = createInputSource( new File( baseFile.getParentFile(), systemId ), injections );
+				inputSource.setSystemId( baseFile.getAbsolutePath() );
+				return inputSource;
+			}
+		}
+		return null;
+	}
+
+	private InputSource createInputSource(File entFile, LinkedHashSet<ValueInjection> injections) throws IOException {
+		// need to read all the contents into memory here and prepend our injections
+		StringBuilder buffer = FileUtils.buildInjectedEntitySubset( injections );
+		if ( entFile.exists() ) {
+			final String contents = FileUtils.fileRead( entFile );
+			buffer.append( contents );
+		}
+		else {
+			log.warn( "referenced ENT file not found: " + entFile.getAbsolutePath() );
+		}
+		return new InputSource( new StringReader( buffer.toString() ) );
+	}
+
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-		// in my experience an XInclude is presented here with a null publicId and a file:// url systemId
-		// I have never seen this documented anywhere as what is to expected however.
-		if ( publicId != null || systemId == null ) {
-			return null;
-		}
-		if ( ! systemId.startsWith( "file:" ) && ! systemId.endsWith( ".xml" ) ) {
-			return null;
-		}
-
-		final File file = new File( new URL( systemId ).getFile() );
-		if ( ! file.exists() ) {
-			return null;
-		}
-
-		InputSource source = FileUtils.createInputSource( file, getValueInjections() );
-		source.setSystemId( systemId );
-		return source;
+		return resolveEntity( null, publicId, null, systemId );
 	}
 }
