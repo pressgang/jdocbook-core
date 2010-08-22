@@ -63,7 +63,7 @@ dependencies {
 }
 
 group = 'org.jboss.jdocbook'
-version = '1.0.1-SNAPSHOT'
+version = '1.0.1'
 
 manifest.mainAttributes(
     provider: 'gradle',
