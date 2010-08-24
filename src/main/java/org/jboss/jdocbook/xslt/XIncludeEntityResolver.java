@@ -89,7 +89,7 @@ public class XIncludeEntityResolver implements EntityResolver2 {
 			File baseFile = new File( new URL( baseURI ).getFile() );
 			if ( baseFile.exists() ) {
 				InputSource inputSource = createInputSource( new File( baseFile.getParentFile(), systemId ), injections );
-				inputSource.setSystemId( baseFile.getAbsolutePath() );
+				inputSource.setSystemId( baseFile.toURI().toString() );
 				return inputSource;
 			}
 		}
