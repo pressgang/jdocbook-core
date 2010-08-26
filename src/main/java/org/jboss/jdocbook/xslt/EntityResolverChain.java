@@ -105,6 +105,9 @@ public class EntityResolverChain implements EntityResolver2 {
 				}
 			}
 			else {
+				// JAXP parsers automatically handle "expanding" the system id for you when using EntityResolver.
+				// However since we are bridging between EntityResolver2 and EntityResolver ourselves we need to
+				// handle this
 				if ( expandedSystemId == null ) {
 					expandedSystemId = expandSystemId( baseURI, systemId );
 				}
@@ -117,32 +120,33 @@ public class EntityResolverChain implements EntityResolver2 {
 		return null;
 	}
 
-	private String expandSystemId(String baseURI, String systemId) {
+	private String expandSystemId(String base, String systemId) {
 		if ( systemId == null || systemId.length() == 0 ) {
 			return null;
 		}
 
-		// see if systemId is absolute already
 		try {
 			final URI systemIdURI = new URI( systemId );
 			if ( systemIdURI.isAbsolute() ) {
 				return systemId;
 			}
-		}
-		catch ( URISyntaxException ignore ) {
-		}
 
-		return resolveRelativeURI( resolveURI( baseURI ), systemId ).toString();
+			return resolveBase( base ).resolve( systemId ).normalize().toString();
+		}
+		catch ( URISyntaxException e ) {
+			throw new JDocBookProcessException( "Could not parse systemId [" + systemId + "] as URI", e );
+		}
 	}
 
-	private URI resolveURI(String uriString) {
+	private URI resolveBase(String base) {
+		// IMPL NOTE : `new URI(String)` does not account for null uri strings, so we check for that here
 		try {
-			if ( uriString == null || uriString.length() == 0 ) {
+			if ( base == null || base.length() == 0 ) {
 				return new URI( "file", "", "", null, null );
 			}
 			else {
 				try {
-					return new URI( uriString );
+					return new URI( base );
 				}
 				catch ( URISyntaxException e ) {
 					// base may also be relative
@@ -151,36 +155,7 @@ public class EntityResolverChain implements EntityResolver2 {
 			}
 		}
 		catch ( URISyntaxException e ) {
-			throw new JDocBookProcessException( "Unable to resolve uriString as java.net.URI [" + uriString + "]", e );
-		}
-	}
-
-	private URI resolveRelativeURI(URI base, String resource) {
-		if ( resource == null ) {
-			throw new IllegalArgumentException( "resource cannot be null" );
-		}
-		if ( resource.startsWith( "/" ) ) {
-			resource = resource.substring( 1, resource.length() );
-		}
-
-		// fairly naive impl...
-		final String basePath = base.toString();
-		int chopPoint = basePath.lastIndexOf( '/' );
-		final String path;
-		if ( chopPoint < 0 ) {
-			path = basePath + '/' + resource;
-		}
-		else {
-			path = basePath.substring( 0, chopPoint ) + '/' + resource;
-		}
-
-		try {
-			return new URI( path );
-		}
-		catch ( URISyntaxException e ) {
-			throw new JDocBookProcessException(
-					"Unable to resolve relative URI [base=" + base.toString() + "; resource=" + resource + "]" 
-			);
+			throw new JDocBookProcessException( "Unable to parse base [" + base + "] as URI", e );
 		}
 	}
 }
