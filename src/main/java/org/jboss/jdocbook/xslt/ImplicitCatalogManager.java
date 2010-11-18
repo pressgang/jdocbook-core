@@ -47,7 +47,7 @@ public class ImplicitCatalogManager extends AbstractCatalogManager {
 		}
 		LinkedHashSet<String> names = new LinkedHashSet<String>();
         try {
-            Enumeration enumeration = classLoader.getResources( "/catalog.xml" );
+            Enumeration enumeration = classLoader.getResources( "catalog.xml" );
             while ( enumeration.hasMoreElements() ) {
 				final URL resource = ( URL ) enumeration.nextElement();
 				final String resourcePath = resource.toExternalForm();
