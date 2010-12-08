@@ -17,7 +17,7 @@ configurations {
 }
 
 dependencies {
-    slf4jVersion = '1.5.8'
+    slf4jVersion = '1.6.1'
     commonsExecVersion = '1.0.1'
     doctypeChangerVersion = '1.1'
     xmlResolverVersion = '1.1'
