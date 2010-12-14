@@ -187,7 +187,7 @@ public class StandardDocBookFormatMetadata {
 			setFileExtension( "html" );
 // I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
 // and I do not think there is really a danger in setting it
-//			setRequiresImagePathSetting( false );
+			setRequiresImagePathSetting( false );
 			setRequiresImageCopying( true );
 		}
 	}

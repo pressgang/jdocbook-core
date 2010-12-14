@@ -85,7 +85,7 @@ public class RendererImpl implements Renderer {
 		if ( ! publishingDirectory.exists() ) {
 			boolean created = publishingDirectory.mkdirs();
 			if ( !created ) {
-				log.info( "Unable to create publishing directory {}", publishingDirectory.getAbsolutePath() );
+				log.warn( "Unable to create publishing directory {}", publishingDirectory.getAbsolutePath() );
 			}
 		}
 
