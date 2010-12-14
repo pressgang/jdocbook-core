@@ -39,7 +39,7 @@ dependencies {
             [group: 'xerces', name: 'xercesImpl', version: xercesVersion],
             [group: 'saxon', name: 'saxon', version: saxonVersion],
             [group: 'org.codehaus.plexus', name: 'plexus-utils', version: plexusUtilsVersion],
-            [group: 'org.apache.xmlgraphics', name: 'fop', version: fopVersion, ext: 'jar'],
+            [group: 'org.apache.xmlgraphics', name: 'fop', version: fopVersion],
             [group: 'org.apache.xmlgraphics', name: 'xmlgraphics-commons', version: xmlGraphicsCommonsVersion],
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-api', version: avalonVersion],
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-impl', version: avalonVersion],
