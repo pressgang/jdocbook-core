@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
 
 /**
  * CatalogManager which resolves its catalogs internally via  classpath
- * resource lookups.  Its looks for resources named '/catalog.xml' on the
+ * resource lookups.  Its looks for resources named 'catalog.xml' on the
  * classpath.
  *
  * @author Steve Ebersole
