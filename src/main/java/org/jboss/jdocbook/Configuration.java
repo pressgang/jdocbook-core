@@ -24,7 +24,7 @@
 package org.jboss.jdocbook;
 
 import java.util.LinkedHashSet;
-import java.util.Properties;
+import java.util.Map;
 
 /**
  * Describes general user configuration data.
@@ -37,7 +37,7 @@ public interface Configuration {
 	 *
 	 * @return The <tt>XSLT</tt> parameters.
 	 */
-	public Properties getTransformerParameters();
+	public Map<String, String> getTransformerParameters();
 
 	/**
 	 * Should relative uris be used to reference images?

@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -206,7 +205,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		}
 	}
 
-	private static void configureTransformer(Transformer transformer, URIResolver uriResolver, Properties transformerParameters) {
+	private static void configureTransformer(Transformer transformer, URIResolver uriResolver, Map<String,String> transformerParameters) {
 		if ( transformer instanceof Controller ) {
 			Controller controller = ( Controller ) transformer;
 			try {
@@ -225,8 +224,8 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		if ( transformerParameters == null ) {
 			return;
 		}
-		for ( Map.Entry<Object, Object> entry : transformerParameters.entrySet() ) {
-			transformer.setParameter( ( String ) entry.getKey(), entry.getValue() );
+		for ( Map.Entry<String, String> entry : transformerParameters.entrySet() ) {
+			transformer.setParameter( entry.getKey(), entry.getValue() );
 		}
 	}
 
