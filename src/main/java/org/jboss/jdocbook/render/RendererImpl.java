@@ -77,7 +77,7 @@ public class RendererImpl implements Renderer {
 
 		File sourceFile = source.resolveSourceDocument();
 		if ( !sourceFile.exists() ) {
-			log.info( "Source document {} did not exist; skipping", sourceFile.getAbsolutePath() );
+			log.warn( "Source document {} did not exist; skipping", sourceFile.getAbsolutePath() );
 			return;
 		}
 
@@ -122,14 +122,14 @@ public class RendererImpl implements Renderer {
 		if ( targetFile.exists() ) {
 			boolean deleted = targetFile.delete();
 			if ( !deleted ) {
-				log.info( "Unable to delete existing target file {}", targetFile.getAbsolutePath() );
+				log.warn( "Unable to delete existing target file {}", targetFile.getAbsolutePath() );
 			}
 		}
 		if ( !targetFile.exists() ) {
 			try {
 				boolean created = targetFile.createNewFile();
 				if ( !created ) {
-					log.info( "Unable to create target file {}", targetFile.getAbsolutePath() );
+					log.warn( "Unable to create target file {}", targetFile.getAbsolutePath() );
 				}
 			}
 			catch ( IOException e ) {
