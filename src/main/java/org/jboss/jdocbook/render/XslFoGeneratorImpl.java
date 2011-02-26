@@ -63,7 +63,7 @@ public class XslFoGeneratorImpl implements XslFoGenerator {
 		final Transformer transformer = buildXslFoTransformer( formatPlan );
 
 		final String sourceFileBaseName = FileUtils.basename( source.resolveSourceDocument().getAbsolutePath() );
-		final File fo = new File( source.getXslFoDirectory(), sourceFileBaseName + ".fo" );
+		final File fo = new File( source.getXslFoDirectory(), sourceFileBaseName + "fo" );
 
 		String lang = TranslationUtils.render( source.getLanguage(), componentRegistry.getConfiguration().getLocaleSeparator() );
 		transformer.setParameter( "l10n.gentext.language", lang );
