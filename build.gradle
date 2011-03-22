@@ -1,7 +1,18 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenRepo name: "jboss", urls: "http://repository.jboss.org/nexus/content/groups/public/"
+        mavenRepo urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
+    }
+    dependencies {
+        classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.0.0'
+    }
+}
 apply plugin: 'java'
 apply plugin: 'maven'  // used for 'install' and 'upload'/'deploy' task
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'uploadAuth'
 apply { url: 'https://loom.svn.sourceforge.net/svnroot/loom/shared/trunk/artifacts.gradle' } // sets up source and javadoc jar uploads
 
 defaultTasks 'classes'
@@ -13,7 +24,7 @@ repositories {
 }
 
 configurations {
-    deployerJars
+    deployerJars {description = 'Jars needed for doing deployment to JBoss Nexus repo'}
 }
 
 dependencies {
@@ -25,7 +36,7 @@ dependencies {
     saxonVersion = '6.5.3'
     plexusUtilsVersion = '2.0.3'
     fopVersion = '1.0'
-	xmlGraphicsCommonsVersion = '1.4'
+    xmlGraphicsCommonsVersion = '1.4'
     avalonVersion = '4.3.1'
     jdomVersion = '1.0'
 
@@ -55,8 +66,11 @@ dependencies {
 }
 
 group = 'org.jboss.jdocbook'
-version = '1.0.5-SNAPSHOT'
+version = '1.0.5'
+uploadArchives.dependsOn install
 
+targetCompatibility = "1.5"
+sourceCompatibility = "1.5"
 manifest.mainAttributes(
     provider: 'gradle',
     'Implementation-Url': 'http://jboss.org',
@@ -102,24 +116,12 @@ configure(install.repositories.mavenInstaller) {
     pom.project pomConfig
 }
 
-if ( ! hasProperty('MY_JBOSS_USER') ) {
-    MY_JBOSS_USER = "";
-}
-if ( ! hasProperty('MY_JBOSS_PASS') ) {
-    MY_JBOSS_PASS = "";
-}
-
 uploadArchives {
     repositories.mavenDeployer {
         name = 'jbossDeployer'
         configuration = configurations.deployerJars
         pom.project pomConfig
-        credentials = [userName: MY_JBOSS_USER, password: MY_JBOSS_PASS]
-        repository(url: "https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/") {
-            authentication(credentials)
-        }
-        snapshotRepository(url: "https://repository.jboss.org/nexus/content/repositories/snapshots/") {
-            authentication(credentials)
-        }
+        repository(id: "jboss-releases-repository",url: "https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/")
+        snapshotRepository(id: "jboss-snapshots-repository",url: "https://repository.jboss.org/nexus/content/repositories/snapshots/")
     }
 }
