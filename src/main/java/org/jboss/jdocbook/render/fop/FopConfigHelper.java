@@ -199,19 +199,23 @@ public class FopConfigHelper {
 						}
 					}
 			);
-			for ( File fontDirectory : componentRegistry.getEnvironment().getFontDirectories() ) {
-				for ( File fontFile : fontDirectory.listFiles() ) {
-					EmbedFontInfo[] infos = fontInfoFinder.find( toURL( fontFile ), fontResolver, fontCache );
-					if ( infos == null || infos.length == 0 ) {
-						continue;
-					}
-					for ( EmbedFontInfo info : infos ) {
-						if ( info.getEmbedFile() != null ) {
-							infoList.add( info );
-						}
-					}
-				}
-			}
+            for (File fontDirectory : componentRegistry.getEnvironment().getFontDirectories()) {
+                if (fontDirectory.exists() && fontDirectory.isDirectory()) {
+                    for (File fontFile : fontDirectory.listFiles()) {
+                        EmbedFontInfo[] infos = fontInfoFinder.find(toURL(fontFile), fontResolver, fontCache);
+                        if (infos == null || infos.length == 0) {
+                            continue;
+                        }
+                        for (EmbedFontInfo info : infos) {
+                            if (info.getEmbedFile() != null) {
+                                infoList.add(info);
+                            }
+                        }
+                    }
+                } else {
+                    log.warn( "Defined font directory {} is not exist or is not a directory" , fontDirectory );
+                }
+            }
 		}
 
 		return infoList;
