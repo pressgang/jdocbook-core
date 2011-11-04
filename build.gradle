@@ -82,16 +82,16 @@ manifest.mainAttributes(
 def pomConfig = {
     name 'jDocBook Core'
     description 'The core jDocBook functionality'
-    url 'http://github.com/sebersole/jdocbook-core'
+    url 'http://github.com/pressgang/jdocbook-core'
     organization 'JBoss.org'
     issueManagement {
         system 'github'
-        url 'http://github.com/sebersole/jdocbook-core/issues'
+        url 'http://github.com/pressgang/jdocbook-core/issues'
     }
     scm {
-        url "http://github.com/sebersole/jdocbook-core"
-        connection "scm:git:http://github.com/sebersole/jdocbook-core.git"
-        developerConnection "scm:git:git@github.com:sebersole/jdocbook-core.git"
+        url "http://github.com/pressgang/jdocbook-core"
+        connection "scm:git:http://github.com/pressgang/jdocbook-core.git"
+        developerConnection "scm:git:git@github.com:pressgang/jdocbook-core.git"
     }
     licenses {
         license {
