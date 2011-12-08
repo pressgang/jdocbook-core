@@ -105,6 +105,9 @@ public class PotSynchronizerImpl implements PotSynchronizer {
 				log.trace( "updating POT file {0}", potFile );
 				executor.execute( commandLine );
 			}
+			catch (IOException ioe) {
+				throw new JDocBookProcessException( "Unable to execute xml2pot command", ioe );
+			}
 			finally {
 				try {
 					xmlStream.flush();
