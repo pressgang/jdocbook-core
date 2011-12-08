@@ -90,7 +90,8 @@ public interface Configuration {
 	public Profiling getProfiling();
 
 	/**
-	 * Retrieve the DocBook version string to look for in locally resolving DocBook resources.
+	 * Retrieve the DocBook version string to look for in locally resolving DocBook resources.  Used only in case
+	 * Environment#getDocBookXsltResolutionStrategy() returns Environment.DocBookXsltResolutionStrategy#NAMED
 	 *
 	 * @return The DocBook version to look from in URL strings for local resolution.
 	 */
