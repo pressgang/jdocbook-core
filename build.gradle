@@ -55,7 +55,9 @@ dependencies {
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-api', version: avalonVersion],
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-impl', version: avalonVersion],
             [group: 'jdom', name: 'jdom', version: jdomVersion],
-			[group: 'net.sf.docbook', name: 'docbook-xsl', version: '1.76.1']
+			[group: 'net.sf.docbook', name: 'docbook-xsl', version: '1.76.1'],
+			[group: 'net.sf.docbook', name: 'docbook-xsl-xalan', version: '1.0.0'],
+			[group: 'net.sf.docbook', name: 'docbook-xsl-saxon', version: '1.0.0']
     )
     testCompile(
             [group: 'junit', name: 'junit', version: junitVersion],
