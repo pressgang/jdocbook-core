@@ -21,18 +21,18 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-
 package org.jboss.jdocbook.test;
 
 import java.io.File;
 import java.util.List;
 
+import org.jboss.jdocbook.DocBookSchemaResolutionStrategy;
 import org.jboss.jdocbook.Environment;
 import org.jboss.jdocbook.ResourceDelegate;
 import org.jboss.jdocbook.test.util.ResourcesUtil;
 
 /**
- * @author: Strong Liu
+ * @author Strong Liu
  */
 abstract public class AbstractEnvironment implements Environment {
 	public ResourceDelegate getResourceDelegate() {
@@ -53,5 +53,9 @@ abstract public class AbstractEnvironment implements Environment {
 
 	public DocBookXsltResolutionStrategy getDocBookXsltResolutionStrategy() {
 		return DocBookXsltResolutionStrategy.INCLUSIVE;
+	}
+
+	public DocBookSchemaResolutionStrategy getDocBookSchemaResolutionStrategy() {
+		return DocBookSchemaResolutionStrategy.RNG;
 	}
 }

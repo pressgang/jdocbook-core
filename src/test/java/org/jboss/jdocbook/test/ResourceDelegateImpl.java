@@ -21,17 +21,14 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-
 package org.jboss.jdocbook.test;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.jboss.jdocbook.ResourceDelegate;
 
 /**
- * @author: Strong Liu
+ * @author Strong Liu
  */
 public class ResourceDelegateImpl implements ResourceDelegate {
 	public URL locateClassPathResource(String name) {

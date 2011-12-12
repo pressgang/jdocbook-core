@@ -40,7 +40,7 @@ dependencies {
     avalonVersion = '4.3.1'
     jdomVersion = '1.0'
 
-    junitVersion = '3.8.2'
+    junitVersion = '4.8.2'
 
     compile(
             [group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion],
@@ -55,9 +55,10 @@ dependencies {
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-api', version: avalonVersion],
             [group: 'org.apache.avalon.framework', name: 'avalon-framework-impl', version: avalonVersion],
             [group: 'jdom', name: 'jdom', version: jdomVersion],
-			[group: 'net.sf.docbook', name: 'docbook-xsl', version: '1.76.1'],
-			[group: 'net.sf.docbook', name: 'docbook-xsl-xalan', version: '1.0.0'],
-			[group: 'net.sf.docbook', name: 'docbook-xsl-saxon', version: '1.0.0']
+			"net.sf.docbook:docbook-xsl:1.76.1",
+			"net.sf.docbook:docbook-xsl-xalan:1.0.0",
+			"net.sf.docbook:docbook-xsl-saxon:1.0.0",
+			"net.sf.docbook:docbook-xml:5.0"
     )
     testCompile(
             [group: 'junit', name: 'junit', version: junitVersion],

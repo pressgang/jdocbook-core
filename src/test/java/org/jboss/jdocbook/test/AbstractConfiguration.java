@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-
 package org.jboss.jdocbook.test;
 
 import java.util.LinkedHashSet;
@@ -32,7 +31,7 @@ import org.jboss.jdocbook.Profiling;
 import org.jboss.jdocbook.ValueInjection;
 
 /**
- * @author: Strong Liu
+ * @author Strong Liu
  */
 public class AbstractConfiguration implements Configuration{
 	public Map<String, String> getTransformerParameters() {

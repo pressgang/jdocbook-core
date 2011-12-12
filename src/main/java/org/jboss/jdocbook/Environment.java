@@ -92,4 +92,5 @@ public interface Environment {
 	 */
 	public DocBookXsltResolutionStrategy getDocBookXsltResolutionStrategy();
 
+	public DocBookSchemaResolutionStrategy getDocBookSchemaResolutionStrategy();
 }

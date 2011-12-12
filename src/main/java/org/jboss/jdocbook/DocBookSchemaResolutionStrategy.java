@@ -1,7 +1,7 @@
 /*
  * jDocBook, processing of DocBook sources
  *
- * Copyright (c) 2011, Red Hat Inc. or third-party contributors as
+ * Copyright (c) 2010, Red Hat Inc. or third-party contributors as
  * indicated by the @author tags or express copyright attribution
  * statements applied by the authors.  All third-party contributions are
  * distributed under license by Red Hat Inc.
@@ -21,36 +21,33 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-
-package org.jboss.jdocbook.test.util;
-
-import java.io.File;
+package org.jboss.jdocbook;
 
 /**
- * @author Strong Liu
- */
-public class ResourcesUtil {
-	public static File RESOURCE_DIR = new File( "src/test/resources" );
-	public static File SAMPLE_FILE = new File( RESOURCE_DIR, "sample.xml" );
-
+ * Defines the manner in which the DocBook recommended publicId for specifying its schema is resolved.  They offer
+ * quite a few flavors of schema.
+ *
+* @author Steve Ebersole
+*/
+public enum DocBookSchemaResolutionStrategy {
 	/**
-	 * @param path relative to test/resources
+	 * Resolve to the DTD "schema"
 	 */
-	public static File getFile(String path) {
-		return new File( RESOURCE_DIR, path );
-	}
-
-	private static File testDir;
-
-	public static File getTestDir() {
-		if ( testDir == null || !testDir.exists() ) {
-			testDir = new File( "/tmp/jdocbook-core-test" );
-		}
-		return testDir;
-	}
-
-	public static void main(String[] args) {
-		System.out.println( new File( "src/test/resources" ).exists() );
-		System.out.println( getFile( "sample.xml" ).exists() );
-	}
+	DTD,
+	/**
+	 * Resolve to the XML Schema (XSD) schema
+	 */
+	XSD,
+	/**
+	 * Resolve the RelaxNG schema
+	 */
+	RNG,
+	/**
+	 * Resolve to the compact RelaxNG schema
+	 */
+	RNC,
+	/**
+	 * Resolve to the Schematron schema
+	 */
+	SCH
 }

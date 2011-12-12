@@ -38,7 +38,7 @@ import org.jboss.jdocbook.util.Constants;
 import org.jboss.jdocbook.util.FileUtils;
 import org.jboss.jdocbook.util.TranslationUtils;
 import org.jboss.jdocbook.xslt.EntityResolverChain;
-import org.jboss.jdocbook.xslt.LocalDocBookEntityResolver;
+import org.jboss.jdocbook.xslt.LocalDocBookSchemaResolver;
 import org.jboss.jdocbook.xslt.TransformerBuilder;
 import org.jboss.jdocbook.xslt.XIncludeEntityResolver;
 import org.jboss.jdocbook.xslt.XSLTException;
@@ -59,7 +59,7 @@ public class ProfilerImpl implements Profiler {
 	public ProfilerImpl(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
 		entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
-		entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
+		entityResolver.addEntityResolver( new LocalDocBookSchemaResolver( componentRegistry.getEnvironment().getDocBookSchemaResolutionStrategy() ) );
 		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
 	}
 

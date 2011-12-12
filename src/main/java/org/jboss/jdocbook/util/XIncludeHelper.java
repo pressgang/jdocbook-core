@@ -36,9 +36,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xerces.jaxp.SAXParserFactoryImpl;
+import org.jboss.jdocbook.DocBookSchemaResolutionStrategy;
 import org.jboss.jdocbook.JDocBookProcessException;
 import org.jboss.jdocbook.xslt.EntityResolverChain;
-import org.jboss.jdocbook.xslt.LocalDocBookEntityResolver;
+import org.jboss.jdocbook.xslt.LocalDocBookSchemaResolver;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -48,15 +49,22 @@ import org.xml.sax.SAXException;
  *
  * @author Steve Ebersole
  */
+@SuppressWarnings( {"UnusedDeclaration"})
 public class XIncludeHelper {
+
+	public static Set<File> locateInclusions(File root) {
+		return locateInclusions( root, DocBookSchemaResolutionStrategy.RNG );
+	}
+
 	/**
 	 * Given a file which defining an XML document containing XInclude elements, collect all the referenced XInclude
 	 * files.
 	 *
 	 * @param root The file which (potentially) contains XIncludes.
+	 * @param schemaResolutionStrategy Which DocBook schema to use.
 	 * @return The set of files references via XIncludes.
 	 */
-	public static Set<File> locateInclusions(File root) {
+	public static Set<File> locateInclusions(File root, DocBookSchemaResolutionStrategy schemaResolutionStrategy) {
 		final Set<File> includes = new TreeSet<File>();
 
 		EntityResolver entityResolver = new EntityResolver() {
@@ -75,7 +83,7 @@ public class XIncludeHelper {
 		};
 
 		EntityResolverChain entityResolverChain = new EntityResolverChain(entityResolver);
-		entityResolverChain.addEntityResolver(new LocalDocBookEntityResolver());
+		entityResolverChain.addEntityResolver( new LocalDocBookSchemaResolver( schemaResolutionStrategy ) );
 
 		try {
 			SAXParserFactory parserFactory = new SAXParserFactoryImpl();
@@ -94,15 +102,19 @@ public class XIncludeHelper {
 		return includes;
 	}
 
+	public static void findAllInclusionFiles(File masterFile, Set<File> files) {
+		findAllInclusionFiles( masterFile, files, DocBookSchemaResolutionStrategy.RNG );
+	}
+
 	/**
 	 * Find all files referenced by master file, include indirectly inclusion.
 	 * <p/>
-	 * {@link #locateInclusions(File)} may return files that do not exist or are not normal XML files.
+	 * {@link #locateInclusions} may return files that do not exist or are not normal XML files.
 	 * <p>
 	 * For example:
 	 * <p/>
 	 * 1. If a XML file has the following DOCTYPE, (this is asked by <tt>publican</tt>), then <em>Hibernate_Annotations_Reference_Guide.ent</em>
-	 * will be returned by {@link XIncludeHelper#locateInclusions(File)}
+	 * will be returned by {@link XIncludeHelper#locateInclusions}
 	 * <blockquote><pre>
 	 * &lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 	 * &lt;!ENTITY % BOOK_ENTITIES SYSTEM "Hibernate_Annotations_Reference_Guide.ent"&gt;
@@ -119,7 +131,7 @@ public class XIncludeHelper {
 	 * @param masterFile The source file from which to start looking
 	 * @param files The collected, matching files.
 	 */
-	public static void findAllInclusionFiles(File masterFile, Set<File> files) {
+	public static void findAllInclusionFiles(File masterFile, Set<File> files, DocBookSchemaResolutionStrategy schemaResolutionStrategy) {
 		if ( masterFile == null || !masterFile.exists() ) {
 			return;
 		}
@@ -128,14 +140,14 @@ public class XIncludeHelper {
 			return;
 		}
 
-		Set<File> inclusions = locateInclusions( masterFile );
+		Set<File> inclusions = locateInclusions( masterFile, schemaResolutionStrategy );
 		if ( inclusions == null || inclusions.isEmpty() ) {
 			return;
 		}
 		for ( File inclusion : inclusions ) {
 			if ( inclusion.exists() ) {
 				files.add( inclusion );
-				findAllInclusionFiles( inclusion, files );
+				findAllInclusionFiles( inclusion, files, schemaResolutionStrategy );
 			}
 		}
 	}

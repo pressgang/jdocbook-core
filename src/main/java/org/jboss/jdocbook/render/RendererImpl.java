@@ -43,7 +43,7 @@ import org.jboss.jdocbook.util.StandardDocBookFormatMetadata;
 import org.jboss.jdocbook.util.TranslationUtils;
 import org.jboss.jdocbook.xslt.EntityResolverChain;
 import org.jboss.jdocbook.xslt.FormatPlan;
-import org.jboss.jdocbook.xslt.LocalDocBookEntityResolver;
+import org.jboss.jdocbook.xslt.LocalDocBookSchemaResolver;
 import org.jboss.jdocbook.xslt.XIncludeEntityResolver;
 import org.jboss.jdocbook.xslt.XSLTException;
 import org.slf4j.Logger;
@@ -63,7 +63,7 @@ public class RendererImpl implements Renderer {
 	public RendererImpl(JDocBookComponentRegistry componentRegistry) {
 		this.componentRegistry = componentRegistry;
 		entityResolver = new EntityResolverChain( componentRegistry.getTransformerBuilder().getCatalogResolver() );
-		entityResolver.addEntityResolver( new LocalDocBookEntityResolver() );
+		entityResolver.addEntityResolver( new LocalDocBookSchemaResolver( componentRegistry.getEnvironment().getDocBookSchemaResolutionStrategy() ) );
 		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
 	}
 

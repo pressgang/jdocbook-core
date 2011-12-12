@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-
 package org.jboss.jdocbook.test.render;
 
 import org.jboss.jdocbook.test.AbstractConfiguration;
