@@ -1,11 +1,11 @@
 buildscript {
     repositories {
         mavenCentral()
-        mavenRepo name: "jboss", urls: "http://repository.jboss.org/nexus/content/groups/public/"
-        mavenRepo urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
+		mavenLocal()
+		mavenRepo name: 'jboss-nexus', url: "https://repository.jboss.org/nexus/content/groups/public/"
     }
     dependencies {
-        classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.0.0'
+        classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.1.0'
     }
 }
 apply plugin: 'java'
@@ -19,8 +19,8 @@ defaultTasks 'classes'
 
 repositories {
     mavenCentral()
-    mavenRepo name: "jboss", urls: "http://repository.jboss.org/nexus/content/groups/public/"
-    mavenRepo name: "mavenCache", urls: "file://" + System.getProperty('user.home') + "/.m2/repository/"
+	mavenLocal()
+	mavenRepo name: 'jboss-nexus', url: "https://repository.jboss.org/nexus/content/groups/public/"
 }
 
 configurations {
@@ -82,7 +82,7 @@ manifest.mainAttributes(
     'Implementation-Vendor-Id': 'org.jboss'
 )
 
-def pomConfig = {
+pomConfig = {
     name 'jDocBook Core'
     description 'The core jDocBook functionality'
     url 'http://github.com/pressgang/jdocbook-core'
