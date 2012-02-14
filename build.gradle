@@ -24,7 +24,9 @@ repositories {
 }
 
 configurations {
-    deployerJars {description = 'Jars needed for doing deployment to JBoss Nexus repo'}
+    deployerJars {
+		description = 'Jars needed for doing deployment to JBoss Nexus repo'
+	}
 }
 
 dependencies {
