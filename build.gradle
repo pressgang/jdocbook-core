@@ -13,7 +13,6 @@ apply plugin: 'maven'  // used for 'install' and 'upload'/'deploy' task
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'uploadAuth'
-apply { url: 'https://loom.svn.sourceforge.net/svnroot/loom/shared/trunk/artifacts.gradle' } // sets up source and javadoc jar uploads
 
 defaultTasks 'classes'
 
@@ -130,6 +129,18 @@ uploadArchives {
         snapshotRepository(id: "jboss-snapshots-repository",url: "https://repository.jboss.org/nexus/content/repositories/snapshots/")
     }
 }
+
+task sourcesJar(type: Jar, dependsOn: compileJava) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+uploadArchives.dependsOn sourcesJar
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
