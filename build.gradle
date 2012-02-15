@@ -67,15 +67,15 @@ dependencies {
             [group: 'org.slf4j', name: 'jcl-over-slf4j', version: slf4jVersion],
             [group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion]
     )
-    deployerJars "org.apache.maven.wagon:wagon-http:1.0-beta-6"
+    deployerJars "org.apache.maven.wagon:wagon-http:1.0"
 }
 
 group = 'org.jboss.jdocbook'
-version = '1.0.6-SNAPSHOT'
+version = '1.0.6'
 uploadArchives.dependsOn install
 
-targetCompatibility = "1.5"
-sourceCompatibility = "1.5"
+targetCompatibility = "1.6"
+sourceCompatibility = "1.6"
 manifest.mainAttributes(
     provider: 'gradle',
     'Implementation-Url': 'http://jboss.org',
