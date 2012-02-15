@@ -70,7 +70,7 @@ dependencies {
 }
 
 group = 'org.jboss.jdocbook'
-version = '1.0.7-SNAPSHOT'
+version = '1.0.7'
 uploadArchives.dependsOn install
 
 targetCompatibility = "1.6"
