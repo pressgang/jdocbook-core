@@ -5,7 +5,7 @@ buildscript {
 		mavenRepo name: 'jboss-nexus', url: "https://repository.jboss.org/nexus/content/groups/public/"
     }
     dependencies {
-        classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.1.0'
+        classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.1.1'
     }
 }
 apply plugin: 'java'
