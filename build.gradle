@@ -14,6 +14,12 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'uploadAuth'
 
+group = 'org.jboss.jdocbook'
+version = '1.1.0-SNAPSHOT'
+
+targetCompatibility = "1.6"
+sourceCompatibility = "1.6"
+
 defaultTasks 'classes'
 
 repositories {
@@ -59,7 +65,7 @@ dependencies {
 			"net.sf.docbook:docbook-xsl:1.76.1",
 			"net.sf.docbook:docbook-xsl-xalan:1.0.0",
 			"net.sf.docbook:docbook-xsl-saxon:1.0.0",
-			"net.sf.docbook:docbook-xml:5.0"
+			"net.sf.docbook:docbook-xml:5.0-all"
     )
     testCompile(
             [group: 'junit', name: 'junit', version: junitVersion],
@@ -69,12 +75,6 @@ dependencies {
     deployerJars "org.apache.maven.wagon:wagon-http:1.0"
 }
 
-group = 'org.jboss.jdocbook'
-version = '1.0.8-SNAPSHOT'
-uploadArchives.dependsOn install
-
-targetCompatibility = "1.6"
-sourceCompatibility = "1.6"
 manifest.mainAttributes(
     provider: 'gradle',
     'Implementation-Url': 'http://jboss.org',
@@ -140,6 +140,7 @@ artifacts {
 }
 
 uploadArchives.dependsOn sourcesJar
+uploadArchives.dependsOn install
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
