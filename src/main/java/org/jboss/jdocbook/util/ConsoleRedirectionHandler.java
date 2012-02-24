@@ -40,6 +40,9 @@ import org.jboss.jdocbook.JDocBookProcessException;
 public class ConsoleRedirectionHandler {
 	private final File redirectionFile;
 
+	private static ThreadLocal<ConsoleRedirectionHandler> currentRedirectionHandler
+			= new ThreadLocal<ConsoleRedirectionHandler>();
+
 	private PrintStream redirectionStream;
 	private PrintStream sysout;
 	private PrintStream syserr;
@@ -48,8 +51,16 @@ public class ConsoleRedirectionHandler {
 		this.redirectionFile = redirectionFile;
 	}
 
+	public static ConsoleRedirectionHandler getCurrentRedirectionHandler() {
+		return currentRedirectionHandler.get();
+	}
+
+	public PrintStream getRedirectionStream() {
+		return redirectionStream;
+	}
+
 	public void start() {
-		System.out.println( "redirecting output to file [" + redirectionFile.getAbsolutePath() + "]" );
+		System.out.println( "redirecting console output to file [" + redirectionFile.getAbsolutePath() + "]" );
 		if ( !redirectionFile.exists() ) {
 			//noinspection ResultOfMethodCallIgnored
 			redirectionFile.getParentFile().mkdirs();
@@ -76,9 +87,14 @@ public class ConsoleRedirectionHandler {
 		syserr = System.err;
 		System.setOut( redirectionStream );
 		System.setErr( redirectionStream );
+
+		currentRedirectionHandler.set( this );
 	}
 
 	public void stop() {
+		sysout.println( "Resetting console output" );
+		currentRedirectionHandler.remove();
+
 		System.setOut( sysout );
 		System.setErr( syserr );
 

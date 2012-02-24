@@ -53,7 +53,8 @@ public class ResultImpl extends SAXResult {
 			fopFactory.setUserConfig( FopConfigHelper.getFopConfiguration( componentRegistry ) );
 
 			FOUserAgent fopUserAgent = fopFactory.newFOUserAgent();
-			fopUserAgent.setProducer( "jDocBook Plugin for Maven" );
+			fopUserAgent.setProducer( "jDocBook - Java-based DocBook processor" );
+			fopUserAgent.getEventBroadcaster().addEventListener( new EventListenerBridge() );
 
 			Fop fop = fopFactory.newFop( MimeConstants.MIME_PDF, fopUserAgent, outputStream );
 			this.setHandler( fop.getDefaultHandler() );
