@@ -49,29 +49,28 @@ dependencies {
 
     junitVersion = '4.8.2'
 
-    compile(
-            [group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion],
-            [group: 'org.apache.commons', name: 'commons-exec', version: commonsExecVersion],
-            [group: 'net.socialchange.doctype', name: 'doctype-changer', version: doctypeChangerVersion],
-            [group: 'xml-resolver', name: 'xml-resolver', version: xmlResolverVersion],
-            [group: 'xerces', name: 'xercesImpl', version: xercesVersion],
-            [group: 'saxon', name: 'saxon', version: saxonVersion],
-            [group: 'org.codehaus.plexus', name: 'plexus-utils', version: plexusUtilsVersion],
-            [group: 'org.apache.xmlgraphics', name: 'fop', version: fopVersion],
-            [group: 'org.apache.xmlgraphics', name: 'xmlgraphics-commons', version: xmlGraphicsCommonsVersion],
-            [group: 'org.apache.avalon.framework', name: 'avalon-framework-api', version: avalonVersion],
-            [group: 'org.apache.avalon.framework', name: 'avalon-framework-impl', version: avalonVersion],
-            [group: 'jdom', name: 'jdom', version: jdomVersion],
-			"net.sf.docbook:docbook-xsl:1.76.1",
-			"net.sf.docbook:docbook-xsl-xalan:1.0.0",
-			"net.sf.docbook:docbook-xsl-saxon:1.0.0",
-			"net.sf.docbook:docbook-xml:5.0-all"
-    )
-    testCompile(
-            [group: 'junit', name: 'junit', version: junitVersion],
-            [group: 'org.slf4j', name: 'jcl-over-slf4j', version: slf4jVersion],
-            [group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion]
-    )
+	compile "net.sf.docbook:docbook-xsl:1.76.1"
+	compile "net.sf.docbook:docbook-xsl-xalan:1.0.0"
+	compile "net.sf.docbook:docbook-xsl-saxon:1.0.0"
+	compile "net.sf.docbook:docbook-xml:5.0-all"
+	compile "xml-resolver:xml-resolver:${xmlResolverVersion}"
+	compile "xerces:xercesImpl:${xercesVersion}"
+	compile "saxon:saxon:${saxonVersion}"
+	compile "jdom:jdom:${jdomVersion}"
+	compile "org.slf4j:slf4j-api:${slf4jVersion}"
+	compile "org.apache.commons:commons-exec:${commonsExecVersion}"
+	compile "net.socialchange.doctype:doctype-changer:${doctypeChangerVersion}"
+	compile "org.codehaus.plexus:plexus-utils:${plexusUtilsVersion}"
+	compile "org.apache.xmlgraphics:fop:${fopVersion}"
+	compile "org.apache.xmlgraphics:xmlgraphics-commons:${xmlGraphicsCommonsVersion}"
+	compile "org.apache.avalon.framework:avalon-framework-api:${avalonVersion}"
+	compile "org.apache.avalon.framework:avalon-framework-impl:${avalonVersion}"
+	compile "net.sf.offo:fop-hyph:2.0" // FOP hyphenation patterns
+
+	testCompile "junit:junit:${junitVersion}"
+	testCompile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+	testCompile "org.slf4j:slf4j-simple:${slf4jVersion}"
+
     deployerJars "org.apache.maven.wagon:wagon-http:1.0"
 }
 
