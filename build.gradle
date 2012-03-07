@@ -8,6 +8,7 @@ buildscript {
         classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.1.1'
     }
 }
+
 apply plugin: 'java'
 apply plugin: 'maven'  // used for 'install' and 'upload'/'deploy' task
 apply plugin: 'eclipse'
@@ -49,10 +50,10 @@ dependencies {
 
     junitVersion = '4.8.2'
 
-	compile "net.sf.docbook:docbook-xsl:1.76.1"
-	compile "net.sf.docbook:docbook-xsl-xalan:1.0.0"
-	compile "net.sf.docbook:docbook-xsl-saxon:1.0.0"
-	compile "net.sf.docbook:docbook-xml:5.0-all"
+    compile "net.sf.docbook:docbook-xsl:1.76.0:ns-resources@zip"    // why is this needed here?  why not just in the (1) styles or (2) doc projects?
+	compile "net.sf.docbook:docbook-xsl-xalan:1.0.0"                // same here...
+	compile "net.sf.docbook:docbook-xsl-saxon:1.0.0"                // and here...
+	compile "net.sf.docbook:docbook-xml:5.0-all"                    // logically, this one is ok because we map uirs to resources from this artifact, although it too could move
 	compile "xml-resolver:xml-resolver:${xmlResolverVersion}"
 	compile "xerces:xercesImpl:${xercesVersion}"
 	compile "saxon:saxon:${saxonVersion}"
