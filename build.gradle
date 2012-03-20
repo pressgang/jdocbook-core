@@ -34,9 +34,8 @@ configurations {
 		description = 'Jars needed for doing deployment to JBoss Nexus repo'
 	}
 }
-
-dependencies {
-    slf4jVersion = '1.6.1'
+ext{
+	slf4jVersion = '1.6.1'
     commonsExecVersion = '1.1'
     doctypeChangerVersion = '1.1'
     xmlResolverVersion = '1.1'
@@ -49,6 +48,9 @@ dependencies {
     jdomVersion = '1.0'
 
     junitVersion = '4.8.2'
+}
+dependencies {
+    
 
     compile "net.sf.docbook:docbook-xsl:1.76.0:ns-resources@zip"    // why is this needed here?  why not just in the (1) styles or (2) doc projects?
 	compile "net.sf.docbook:docbook-xsl-xalan:1.0.0"                // same here...
@@ -83,7 +85,7 @@ manifest.mainAttributes(
     'Implementation-Vendor-Id': 'org.jboss'
 )
 
-pomConfig = {
+ext.pomConfig = {
     name 'jDocBook Core'
     description 'The core jDocBook functionality'
     url 'http://github.com/pressgang/jdocbook-core'
@@ -146,5 +148,5 @@ uploadArchives.dependsOn install
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-8'
+	gradleVersion = '1.0-milestone-9'
 }
