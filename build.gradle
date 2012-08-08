@@ -26,7 +26,7 @@ defaultTasks 'classes'
 repositories {
     mavenCentral()
 	mavenLocal()
-	mavenRepo name: 'jboss-nexus', url: "https://repository.jboss.org/nexus/content/groups/public/"
+	mavenRepo name: 'jboss-nexus', url: "http://repository.jboss.org/nexus/content/groups/public/"
 }
 
 configurations {
@@ -148,5 +148,5 @@ uploadArchives.dependsOn install
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-9'
+		gradleVersion = '1.1'
 }
