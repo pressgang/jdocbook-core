@@ -1,19 +1,26 @@
 buildscript {
     repositories {
         mavenCentral()
-		mavenLocal()
-		mavenRepo name: 'jboss-nexus', url: "https://repository.jboss.org/nexus/content/groups/public/"
-    }
-    dependencies {
-        classpath 'org.hibernate.build.gradle:gradle-upload-auth-plugin:1.1.1'
+        mavenLocal()
+        maven {
+            name 'jboss-nexus'
+            url "http://repository.jboss.org/nexus/content/groups/public/"
+        }
+        maven {
+            name "jboss-snapshots"
+            url "http://snapshots.jboss.org/maven2/"
+        }
+        dependencies {
+            classpath 'org.hibernate.build.gradle:gradle-maven-publish-auth:2.0.1'
+        }
     }
 }
 
 apply plugin: 'java'
-apply plugin: 'maven'  // used for 'install' and 'upload'/'deploy' task
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'uploadAuth'
+apply plugin: 'maven-publish'
+apply plugin: 'maven-publish-auth'
 
 group = 'org.jboss.jdocbook'
 version = '1.1.1-SNAPSHOT'
@@ -25,17 +32,19 @@ defaultTasks 'classes'
 
 repositories {
     mavenCentral()
-	mavenLocal()
-	mavenRepo name: 'jboss-nexus', url: "http://repository.jboss.org/nexus/content/groups/public/"
+    mavenLocal()
+    maven {
+        name 'jboss-nexus'
+        url "http://repository.jboss.org/nexus/content/groups/public/"
+    }
+    maven {
+        name "jboss-snapshots"
+        url "http://snapshots.jboss.org/maven2/"
+    }
 }
 
-configurations {
-    deployerJars {
-		description = 'Jars needed for doing deployment to JBoss Nexus repo'
-	}
-}
-ext{
-	slf4jVersion = '1.6.1'
+ext {
+    slf4jVersion = '1.6.1'
     commonsExecVersion = '1.1'
     doctypeChangerVersion = '1.1'
     xmlResolverVersion = '1.1'
@@ -49,35 +58,32 @@ ext{
 
     junitVersion = '4.8.2'
 }
+
 dependencies {
-    
-
     compile "net.sf.docbook:docbook-xsl:1.76.0:ns-resources@zip"    // why is this needed here?  why not just in the (1) styles or (2) doc projects?
-	compile "net.sf.docbook:docbook-xsl-xalan:1.0.0"                // same here...
-	compile "net.sf.docbook:docbook-xsl-saxon:1.0.0"                // and here...
-	compile "net.sf.docbook:docbook-xml:5.0-all"                    // logically, this one is ok because we map uirs to resources from this artifact, although it too could move
-	compile "xml-resolver:xml-resolver:${xmlResolverVersion}"
-	compile "xerces:xercesImpl:${xercesVersion}"
-	compile "saxon:saxon:${saxonVersion}"
-	compile "jdom:jdom:${jdomVersion}"
-	compile "org.slf4j:slf4j-api:${slf4jVersion}"
-	compile "org.apache.commons:commons-exec:${commonsExecVersion}"
-	compile "net.socialchange.doctype:doctype-changer:${doctypeChangerVersion}"
-	compile "org.codehaus.plexus:plexus-utils:${plexusUtilsVersion}"
-	compile "org.apache.xmlgraphics:fop:${fopVersion}"
-	compile "org.apache.xmlgraphics:xmlgraphics-commons:${xmlGraphicsCommonsVersion}"
-	compile "org.apache.avalon.framework:avalon-framework-api:${avalonVersion}"
-	compile "org.apache.avalon.framework:avalon-framework-impl:${avalonVersion}"
-	compile "net.sf.offo:fop-hyph:2.0" // FOP hyphenation patterns
+    compile "net.sf.docbook:docbook-xsl-xalan:1.0.0"                // same here...
+    compile "net.sf.docbook:docbook-xsl-saxon:1.0.0"                // and here...
+    compile "net.sf.docbook:docbook-xml:5.0-all"                    // logically, this one is ok because we map uirs to resources from this artifact, although it too could move
+    compile "xml-resolver:xml-resolver:${xmlResolverVersion}"
+    compile "xerces:xercesImpl:${xercesVersion}"
+    compile "saxon:saxon:${saxonVersion}"
+    compile "jdom:jdom:${jdomVersion}"
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "org.apache.commons:commons-exec:${commonsExecVersion}"
+    compile "net.socialchange.doctype:doctype-changer:${doctypeChangerVersion}"
+    compile "org.codehaus.plexus:plexus-utils:${plexusUtilsVersion}"
+    compile "org.apache.xmlgraphics:fop:${fopVersion}"
+    compile "org.apache.xmlgraphics:xmlgraphics-commons:${xmlGraphicsCommonsVersion}"
+    compile "org.apache.avalon.framework:avalon-framework-api:${avalonVersion}"
+    compile "org.apache.avalon.framework:avalon-framework-impl:${avalonVersion}"
+    compile "net.sf.offo:fop-hyph:2.0" // FOP hyphenation patterns
 
-	testCompile "junit:junit:${junitVersion}"
-	testCompile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
-	testCompile "org.slf4j:slf4j-simple:${slf4jVersion}"
-
-    deployerJars "org.apache.maven.wagon:wagon-http:1.0"
+    testCompile "junit:junit:${junitVersion}"
+    testCompile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+    testCompile "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 
-manifest.mainAttributes(
+jar.manifest.mainAttributes(
     provider: 'gradle',
     'Implementation-Url': 'http://jboss.org',
     'Implementation-Version': version,
@@ -85,50 +91,78 @@ manifest.mainAttributes(
     'Implementation-Vendor-Id': 'org.jboss'
 )
 
-ext.pomConfig = {
-    name 'jDocBook Core'
-    description 'The core jDocBook functionality'
-    url 'http://github.com/pressgang/jdocbook-core'
-    organization 'JBoss.org'
-    issueManagement {
-        system 'github'
-        url 'http://github.com/pressgang/jdocbook-core/issues'
-    }
-    scm {
-        url "http://github.com/pressgang/jdocbook-core"
-        connection "scm:git:http://github.com/pressgang/jdocbook-core.git"
-        developerConnection "scm:git:git@github.com:pressgang/jdocbook-core.git"
-    }
-    licenses {
-        license {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-        }
-    }
-    developers {
-        developer {
-            id 'sebersole'
-            name 'Steve Ebersole'
-        }
-        developer {
-            id 'stliu'
-            name 'Strong Liu'
-        }
-    }
-}
 
-configure(install.repositories.mavenInstaller) {
-    pom.project pomConfig
-}
+task install(type: Task, dependsOn: publishToMavenLocal)
 
-uploadArchives {
-    repositories.mavenDeployer {
-        name = 'jbossDeployer'
-        configuration = configurations.deployerJars
-        pom.project pomConfig
-        repository(id: "jboss-releases-repository",url: "https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/")
-        snapshotRepository(id: "jboss-snapshots-repository",url: "https://repository.jboss.org/nexus/content/repositories/snapshots/")
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            pom.withXml {
+                // append additional metadata
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+
+                    name 'jDocBook Core'
+                    description 'The core jDocBook functionality'
+                    url 'http://github.com/pressgang/jdocbook-core'
+                    organization {
+                        name 'JBoss.org'
+                        url 'http://jboss.org'
+                    }
+                    issueManagement {
+                        system 'github'
+                        url 'http://github.com/pressgang/jdocbook-core/issues'
+                    }
+                    scm {
+                        url "http://github.com/pressgang/jdocbook-core"
+                        connection "scm:git:http://github.com/pressgang/jdocbook-core.git"
+                        developerConnection "scm:git:git@github.com:pressgang/jdocbook-core.git"
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'sebersole'
+                            name 'Steve Ebersole'
+                        }
+                        developer {
+                            id 'stliu'
+                            name 'Strong Liu'
+                        }
+                    }
+                }
+
+                // TEMPORARY : currently Gradle Publishing feature is exporting dependencies as 'runtime' scope,
+                //      rather than 'compile'; fix that.
+                asNode().dependencies[0].dependency.each {
+                    it.scope[0].value = 'compile'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            if ( version.endsWith( 'SNAPSHOT' ) ) {
+                name 'jboss-snapshots-repository'
+                url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
+            }
+            else {
+                name 'jboss-releases-repository'
+                url 'https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/'
+            }
+        }
     }
 }
 
@@ -137,16 +171,15 @@ task sourcesJar(type: Jar, dependsOn: compileJava) {
     classifier = 'sources'
 }
 
-artifacts {
-    archives sourcesJar
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
 }
-
-uploadArchives.dependsOn sourcesJar
-uploadArchives.dependsOn install
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 task wrapper(type: Wrapper) {
-		gradleVersion = '1.1'
+    gradleVersion = '1.9'
 }
