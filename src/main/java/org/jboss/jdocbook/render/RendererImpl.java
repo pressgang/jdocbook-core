@@ -67,9 +67,7 @@ public class RendererImpl implements Renderer {
 		entityResolver.addEntityResolver( new XIncludeEntityResolver( componentRegistry ) );
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void render(RenderingSource source, FormatOptions formatOptions) {
 		final String languageStr = stringify( source.getLanguage() );
 		final FormatPlan formatPlan = FormatPlanBuilder.buildFormatPlan( formatOptions );
@@ -233,8 +231,6 @@ public class RendererImpl implements Renderer {
 		if ( StandardDocBookFormatMetadata.PDF.getName().equals( formatPlan.getName() ) ) {
 			( (ResultImpl) transformationResult ).release();
 		}
-		else {
-			// nothing to do...
-		}
+		// otherwise, nothing to do...
 	}
 }

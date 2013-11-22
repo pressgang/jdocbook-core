@@ -62,9 +62,7 @@ public class TranslatorImpl implements Translator {
 		return componentRegistry.getConfiguration();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void translate(TranslationSource translationSource) {
 		log.debug( "Starting translation {}", render( translationSource.getLanguage() ) );
 

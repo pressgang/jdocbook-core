@@ -35,9 +35,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Steve Ebersole
  */
 public class RelativeJarUriResolver implements URIResolver {
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Source resolve(String href, String base) throws TransformerException {
 		// href need to be relative
 		if ( href.indexOf( "://" ) > 0 || href.startsWith( "/" ) ) {

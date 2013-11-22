@@ -28,11 +28,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 /**
- * TODO : javadoc
- *
  * @author Steve Ebersole
  */
+@Deprecated
+@SuppressWarnings("UnusedDeclaration")
 public class LocalDocBookURIResolver implements URIResolver {
+	@Override
 	public Source resolve(String href, String base) throws TransformerException {
 		return null;
 	}

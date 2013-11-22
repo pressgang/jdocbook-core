@@ -61,6 +61,7 @@ public class XIncludeEntityResolver implements EntityResolver2 {
 		return componentRegistry.getConfiguration().getValueInjections();
 	}
 
+	@Override
 	public InputSource getExternalSubset(String name, String baseURI) throws SAXException, IOException {
 		// IMPL NOTE: this is the form called when the document contains no external subset (or no DOCTYPE).
 		log.trace( "generating external subset; name=[{}]; baseURI=[{}]", name, baseURI );
@@ -73,6 +74,7 @@ public class XIncludeEntityResolver implements EntityResolver2 {
 		return new InputSource( new StringReader( subset.toString() ) );
 	}
 
+	@Override
 	public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId)
 			throws SAXException, IOException {
 		// IMPL NOTE: this is the form called when the document contains a DOCTYPE.
@@ -109,6 +111,7 @@ public class XIncludeEntityResolver implements EntityResolver2 {
 		return new InputSource( new StringReader( buffer.toString() ) );
 	}
 
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 		return resolveEntity( null, publicId, null, systemId );
 	}

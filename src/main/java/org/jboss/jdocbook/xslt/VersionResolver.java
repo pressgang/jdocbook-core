@@ -55,9 +55,12 @@ public class VersionResolver implements URIResolver {
 		this.componentRegistry = componentRegistry;
 		if ( Environment.DocBookXsltResolutionStrategy.INCLUSIVE == componentRegistry.getEnvironment().getDocBookXsltResolutionStrategy() ) {
 			versionMatcher = new VersionMatcher() {
+				@Override
 				public boolean matched(String version) {
 					return true;
 				}
+
+				@Override
 				public String toString() {
 					return "inclusive";
 				}
@@ -68,9 +71,12 @@ public class VersionResolver implements URIResolver {
 					? "current"
 					: componentRegistry.getConfiguration().getDocBookVersion();
 			versionMatcher = new VersionMatcher() {
+				@Override
 				public boolean matched(String version) {
 					return versionToMatch.equals( version );
 				}
+
+				@Override
 				public String toString() {
 					return "[versionToMatch=" + versionToMatch + "]";
 				}
@@ -78,9 +84,7 @@ public class VersionResolver implements URIResolver {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Source resolve(String href, String base) throws TransformerException {
 		if ( href.startsWith( BASE_HREF ) ) {
 			final int versionEndTokenPosition = href.indexOf( '/', BASE_HREF_LEN );
@@ -116,9 +120,7 @@ public class VersionResolver implements URIResolver {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public String toString() {
 		return super.toString() + " [versionMatcher=" + versionMatcher + "]";
 	}

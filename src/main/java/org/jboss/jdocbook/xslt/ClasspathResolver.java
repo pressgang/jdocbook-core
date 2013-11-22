@@ -48,6 +48,7 @@ public class ClasspathResolver implements URIResolver {
 		this.componentRegistry = componentRegistry;
 	}
 
+	@Override
 	public Source resolve(String href, String base) throws TransformerException {
 		// href would need to start with classpath:
 		if ( !href.startsWith( SCHEME ) ) {

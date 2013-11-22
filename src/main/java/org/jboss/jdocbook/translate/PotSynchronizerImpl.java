@@ -51,9 +51,7 @@ public class PotSynchronizerImpl implements PotSynchronizer {
 		this.componentRegistry = componentRegistry;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void synchronizePot() throws JDocBookProcessException {
 		final File basedir = componentRegistry.getEnvironment().getMasterLanguageDescriptor().getBaseSourceDirectory();
 		final File potDirectory = componentRegistry.getEnvironment().getMasterLanguageDescriptor().getPotDirectory();

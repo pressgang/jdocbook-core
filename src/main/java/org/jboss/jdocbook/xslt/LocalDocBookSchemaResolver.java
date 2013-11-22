@@ -106,6 +106,7 @@ public class LocalDocBookSchemaResolver extends EntityResolverChain {
 			}
 		}
 
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 			if ( publicId == null ) {
 				return null;
@@ -149,6 +150,7 @@ public class LocalDocBookSchemaResolver extends EntityResolverChain {
 	public static abstract class AbstractInternalResolver implements InternalEntityResolver {
 		public abstract String getType();
 
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId) {
 			if ( systemId == null ) {
 				return null;
@@ -171,6 +173,7 @@ public class LocalDocBookSchemaResolver extends EntityResolverChain {
 			return null;
 		}
 
+		@Override
 		public InputStream resolveStream(String resource) {
 			final String resourceName = "docbook/" + getType() + "/" + resource;
 			InputStream stream = getClass().getClassLoader().getResourceAsStream( resourceName );
@@ -181,6 +184,7 @@ public class LocalDocBookSchemaResolver extends EntityResolverChain {
 			return stream;
 		}
 
+		@Override
 		public String getMainDocBookSchemaName() {
 			return "docbook." + getType();
 		}

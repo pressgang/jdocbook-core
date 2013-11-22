@@ -35,9 +35,7 @@ import org.codehaus.plexus.util.SelectorUtils;
  * @author Steve Ebersole
  */
 public class VCSDirectoryExclusionFilter implements FileFilter {
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public boolean accept(File path) {
 		if ( path.isDirectory() ) {
 			if ( isVCSDirectory( path ) ) {

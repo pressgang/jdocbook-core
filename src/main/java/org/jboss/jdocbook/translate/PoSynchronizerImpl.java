@@ -51,9 +51,7 @@ public class PoSynchronizerImpl implements PoSynchronizer {
 		this.componentRegistry = componentRegistry;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void synchronizePo(TranslationSource source) {
 		synchronizePo(
 				componentRegistry.getEnvironment().getMasterLanguageDescriptor().getPotDirectory(),
@@ -68,20 +66,23 @@ public class PoSynchronizerImpl implements PoSynchronizer {
 			log.info( "skipping PO updates; POT directory did not exist : {0}", potDirectory );
 			return;
 		}
-		File[] files = potDirectory.listFiles( new VCSDirectoryExclusionFilter() );
-		for ( int i = 0, X = files.length; i < X; i++) {
-			if ( files[i].isDirectory() ) {
-				// recurse into the directory by calling back into ourselves with the sub-dir
-				synchronizePo(
-						new File( potDirectory, files[i].getName() ),
-						new File( poDirectory, files[i].getName() ),
-						translationLocale
-				);
-			}
-			else {
-				if ( TranslationUtils.isPotFile( files[i] ) ) {
-					File translation = new File( poDirectory, TranslationUtils.determinePoFileName( files[i] ) );
-					updateTranslation( files[i], translation, translationLocale );
+
+		final File[] files = potDirectory.listFiles( new VCSDirectoryExclusionFilter() );
+		if ( files != null ) {
+			for ( File file : files ) {
+				if ( file.isDirectory() ) {
+					// recurse into the directory by calling back into ourselves with the sub-dir
+					synchronizePo(
+							new File( potDirectory, file.getName() ),
+							new File( poDirectory, file.getName() ),
+							translationLocale
+					);
+				}
+				else {
+					if ( TranslationUtils.isPotFile( file ) ) {
+						File translation = new File( poDirectory, TranslationUtils.determinePoFileName( file ) );
+						updateTranslation( file, translation, translationLocale );
+					}
 				}
 			}
 		}

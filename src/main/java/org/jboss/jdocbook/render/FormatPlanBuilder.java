@@ -64,37 +64,45 @@ public class FormatPlanBuilder {
 			this.formatOptions = formatOptions;
 		}
 
+		@Override
 		public String getName() {
 			return formatMetadata.getName();
 		}
 
+		@Override
 		public String getStylesheetResource() {
 			return formatOptions.getStylesheetResource() != null
 					? formatOptions.getStylesheetResource()
 					: formatMetadata.getStylesheetResource();
 		}
 
+		@Override
 		public String getCorrespondingDocBookStylesheetResource() {
 			return formatMetadata.getStylesheetResource();
 		}
 
+		@Override
 		public TargetNamingStrategy getTargetNamingStrategy() {
 			return targetNamingStrategy;
 		}
 
+		@Override
 		public boolean requiresSettingImagePath() {
 			return formatMetadata.requiresImagePathSetting();
 		}
 
+		@Override
 		public boolean requiresImageCopying() {
 			return formatMetadata.requiresImageCopying();
 		}
 
+		@Override
 		public boolean doesChunking() {
 			return formatMetadata.doesChunking();
 		}
 
 		private class TargetNamingStrategyImpl implements TargetNamingStrategy {
+			@Override
 			public String determineTargetFileName(File source) {
 				return formatOptions.getTargetFinalName() != null
 						? formatOptions.getTargetFinalName()

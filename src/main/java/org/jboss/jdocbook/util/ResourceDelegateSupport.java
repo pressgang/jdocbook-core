@@ -37,9 +37,7 @@ import org.jboss.jdocbook.ResourceDelegate;
 public abstract class ResourceDelegateSupport implements ResourceDelegate {
 	protected abstract ClassLoader getResourceClassLoader();
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public URL requireResource(String name) {
 		URL resource = locateResource( name );
 		if ( resource == null ) {
@@ -48,9 +46,7 @@ public abstract class ResourceDelegateSupport implements ResourceDelegate {
 		return resource;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public URL locateResource(String name) {
 		if ( name.startsWith( "classpath:" ) ) {
 			return locateClassPathResource( name.substring( 10 ) );
@@ -69,9 +65,7 @@ public abstract class ResourceDelegateSupport implements ResourceDelegate {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public URL locateClassPathResource(String name) {
 		while ( name.startsWith( "/" ) ) {
 			name = name.substring( 1 );

@@ -43,6 +43,7 @@ public class ResolverChain implements URIResolver {
 	public ResolverChain() {
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public ResolverChain(URIResolver resolver) {
 		this();
 		addResolver( resolver );
@@ -60,9 +61,8 @@ public class ResolverChain implements URIResolver {
 	/**
 	 * Here we iterate over all the chained resolvers and delegate to them
 	 * until we find one which can handle the resolve request (if any).
-	 *
-	 * {@inheritDoc}
 	 */
+	@Override
 	public Source resolve(String href, String base) throws TransformerException {
 		Source result = null;
 		for ( URIResolver resolver : resolvers ) {

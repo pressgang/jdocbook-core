@@ -75,9 +75,7 @@ public class ProfilerImpl implements Profiler {
 		return componentRegistry.getTransformerBuilder();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public void profile(ProfilingSource profilingSource) {
 		try {
 			final File targetFile = profilingSource.resolveProfiledDocumentFile();

@@ -125,31 +125,37 @@ public class StandardDocBookFormatMetadata {
 
 		private BasicFormatMetadata(String name) {
 			this.name = name;
-// I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
-// and I do not think there is really a danger in setting it
+			// I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
+			// and I do not think there is really a danger in setting it
 			this.requiresImagePathSetting = true;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String getStylesheetResource() {
 			return stylesheetResource;
 		}
 
+		@Override
 		public String getFileExtension() {
 			return fileExtension;
 		}
 
+		@Override
 		public boolean requiresImagePathSetting() {
 			return requiresImagePathSetting;
 		}
 
+		@Override
 		public boolean requiresImageCopying() {
 			return requiresImageCopying;
 		}
 
+		@Override
 		public boolean doesChunking() {
 			return doesChunking;
 		}
@@ -185,8 +191,8 @@ public class StandardDocBookFormatMetadata {
 			super( name );
 			setDoesChunking( true );
 			setFileExtension( "html" );
-// I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
-// and I do not think there is really a danger in setting it
+			// I have seen this cause problems when the XSLT is looking at 'img.src.path' for callouts
+			// and I do not think there is really a danger in setting it
 			setRequiresImagePathSetting( false );
 			setRequiresImageCopying( true );
 		}

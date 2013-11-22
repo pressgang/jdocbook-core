@@ -44,9 +44,6 @@ import org.jboss.jdocbook.Environment;
 import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.ResourceDelegate;
 import org.jboss.jdocbook.util.NoOpWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.Attributes;
 
 /**
  * Implementation of the {@link TransformerBuilder} contract
@@ -71,9 +68,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		catalogResolver = new CatalogResolver( catalogManager );
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public CatalogResolver getCatalogResolver() {
 		return catalogResolver;
 	}
@@ -90,17 +85,13 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		return componentRegistry.getConfiguration();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Transformer buildStandardTransformer(URL xslt) {
 		URIResolver uriResolver = buildStandardUriResolver();
 		return buildTransformer( xslt, uriResolver );
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Transformer buildStandardTransformer(String xsltResource) {
 		URIResolver uriResolver = buildStandardUriResolver();
 		return buildTransformer( resourceDelegate().requireResource( xsltResource ), uriResolver );
@@ -120,9 +111,7 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 		resolverChain.addResolver( catalogResolver );
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public Transformer buildTransformer(FormatPlan formatPlan, URL customStylesheet) throws XSLTException {
 		URIResolver uriResolver = buildStandardUriResolver();
 		URL xsltStylesheet = customStylesheet == null
@@ -148,8 +137,8 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 				transformerTemplatesCache.put( xsltUrlStr, transformerTemplates );
 			}
 			transformer = transformerTemplates.newTransformer();
-//			Source source = new StreamSource( xslt.openStream(), xsltUrlStr );
-//			transformer = transformerFactory.newTransformer( source );
+			//Source source = new StreamSource( xslt.openStream(), xsltUrlStr );
+			//transformer = transformerFactory.newTransformer( source );
 		}
 		catch ( IOException e ) {
 			throw new XSLTException( "problem opening stylesheet [" + xsltUrlStr + "]", e );
@@ -163,47 +152,58 @@ public class TransformerBuilderImpl implements TransformerBuilder {
 	}
 
 	private SAXTransformerFactory buildSAXTransformerFactory() {
-		com.icl.saxon.TransformerFactoryImpl factoryImpl = new com.icl.saxon.TransformerFactoryImpl();
-		//factoryImpl.setAttribute( "http://icl.com/saxon/feature/messageEmitterClass", SaxonXslMessageEmitter.class.getName() );
-		return factoryImpl;
+		return new com.icl.saxon.TransformerFactoryImpl();
 	}
 
-	private static class SaxonXslMessageEmitter extends com.icl.saxon.output.Emitter {
-		private static final Logger log = LoggerFactory.getLogger( SaxonXslMessageEmitter.class );
-
-		private StringBuffer buffer;
-
-		public void startDocument() throws TransformerException {
-			if ( buffer != null ) {
-				System.out.println( "Unexpected call sequence on SaxonXslMessageEmitter; discarding [" + buffer.toString() + "]" );
-			}
-			buffer = new StringBuffer();
-		}
-
-		public void endDocument() throws TransformerException {
-			log.trace( "[STYLESHEET MESSAGE] " + buffer.toString() );
-			buffer.setLength( 0 );
-			buffer = null;
-		}
-
-		public void startElement(int i, Attributes attributes, int[] ints, int i1) throws TransformerException {
-		}
-
-		public void endElement(int i) throws TransformerException {
-		}
-
-		public void characters(char[] chars, int start, int end) throws TransformerException {
-			for ( int i = start; i < end; i++ ) {
-				buffer.append( chars[i] );
-			}
-		}
-
-		public void processingInstruction(String s, String s1) throws TransformerException {
-		}
-
-		public void comment(char[] chars, int i, int i1) throws TransformerException {
-		}
-	}
+//	private SAXTransformerFactory buildSAXTransformerFactory() {
+//		com.icl.saxon.TransformerFactoryImpl factoryImpl = new com.icl.saxon.TransformerFactoryImpl();
+//		factoryImpl.setAttribute( "http://icl.com/saxon/feature/messageEmitterClass", SaxonXslMessageEmitter.class.getName() );
+//		return factoryImpl;
+//	}
+//
+//	private static class SaxonXslMessageEmitter extends com.icl.saxon.output.Emitter {
+//		private static final Logger log = LoggerFactory.getLogger( SaxonXslMessageEmitter.class );
+//
+//		private StringBuffer buffer;
+//
+//		@Override
+//		public void startDocument() throws TransformerException {
+//			if ( buffer != null ) {
+//				System.out.println( "Unexpected call sequence on SaxonXslMessageEmitter; discarding [" + buffer.toString() + "]" );
+//			}
+//			buffer = new StringBuffer();
+//		}
+//
+//		@Override
+//		public void endDocument() throws TransformerException {
+//			log.trace( "[STYLESHEET MESSAGE] " + buffer.toString() );
+//			buffer.setLength( 0 );
+//			buffer = null;
+//		}
+//
+//		@Override
+//		public void startElement(int i, Attributes attributes, int[] ints, int i1) throws TransformerException {
+//		}
+//
+//		@Override
+//		public void endElement(int i) throws TransformerException {
+//		}
+//
+//		@Override
+//		public void characters(char[] chars, int start, int end) throws TransformerException {
+//			for ( int i = start; i < end; i++ ) {
+//				buffer.append( chars[i] );
+//			}
+//		}
+//
+//		@Override
+//		public void processingInstruction(String s, String s1) throws TransformerException {
+//		}
+//
+//		@Override
+//		public void comment(char[] chars, int i, int i1) throws TransformerException {
+//		}
+//	}
 
 	private static void configureTransformer(Transformer transformer, URIResolver uriResolver, Map<String,String> transformerParameters) {
 		if ( transformer instanceof Controller ) {

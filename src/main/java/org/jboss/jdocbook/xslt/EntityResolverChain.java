@@ -57,9 +57,7 @@ public class EntityResolverChain implements EntityResolver2 {
 		entityResolvers.addFirst( entityResolver );
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 		log.trace( "EntityResolver#resolveEntity: publicId=[" + publicId + "]; systemId=[" + systemId + "]" );
 		for ( EntityResolver entityResolver : entityResolvers ) {
@@ -71,9 +69,7 @@ public class EntityResolverChain implements EntityResolver2 {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public InputSource getExternalSubset(String name, String baseURI) throws SAXException, IOException {
 		log.trace( "EntityResolver2#getExternalSubset: name=[{}]; baseURI=[{}]", name, baseURI );
 		for ( EntityResolver entityResolver : entityResolvers ) {
@@ -87,9 +83,7 @@ public class EntityResolverChain implements EntityResolver2 {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
 	public InputSource resolveEntity(String name, String publicId, String baseURI, String systemId)
 			throws SAXException, IOException {
 		log.trace(

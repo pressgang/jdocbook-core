@@ -47,6 +47,7 @@ import org.jboss.jdocbook.JDocBookProcessException;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ public class FopConfigHelper {
 	public static DefaultConfiguration getFopConfiguration(JDocBookComponentRegistry componentRegistry) {
 		if ( INSTANCE == null ) {
 			log.info( "creating FOP user-config DOM" );
-			INSTANCE =  new FopConfigHelper( componentRegistry );
+			INSTANCE = new FopConfigHelper( componentRegistry );
 		}
 		return INSTANCE.fopConfiguration;
 	}
@@ -103,18 +104,19 @@ public class FopConfigHelper {
 		return fopUserConfiguration;
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({"unchecked"})
 	private DefaultConfiguration buildFontsConfig() {
 		DefaultConfiguration fontsConfig = new DefaultConfiguration( "fonts" );
 
-// did not work for me :(
-//			if ( environment.getFontDirectories() != null ) {
-//				for ( File fontDirectory : environment.getFontDirectories() ) {
-//					DefaultConfiguration fontDirectoryElement = new DefaultConfiguration( "directory" );
-//					fontDirectoryElement.setValue( fontDirectory.getAbsolutePath() );
-//					fontsConfig.addChild( fontDirectoryElement );
-//				}
-//			}
+		/* did not work for me :(
+		if ( componentRegistry.getEnvironment().getFontDirectories() != null ) {
+			for ( File fontDirectory : componentRegistry.getEnvironment().getFontDirectories() ) {
+				DefaultConfiguration fontDirectoryElement = new DefaultConfiguration( "directory" );
+				fontDirectoryElement.setValue( fontDirectory.getAbsolutePath() );
+				fontsConfig.addChild( fontDirectoryElement );
+			}
+		}
+		*/
 
 		// this code is mostly copied from
 		// http://dev.plutext.org/trac/docx4j/browser/trunk/docx4j/src/main/java/org/docx4j/convert/out/pdf/viaXSLFO/Conversion.java
@@ -199,23 +201,35 @@ public class FopConfigHelper {
 						}
 					}
 			);
-            for (File fontDirectory : componentRegistry.getEnvironment().getFontDirectories()) {
-                if (fontDirectory.exists() && fontDirectory.isDirectory()) {
-                    for (File fontFile : fontDirectory.listFiles()) {
-                        EmbedFontInfo[] infos = fontInfoFinder.find(toURL(fontFile), fontResolver, fontCache);
-                        if (infos == null || infos.length == 0) {
-                            continue;
-                        }
-                        for (EmbedFontInfo info : infos) {
-                            if (info.getEmbedFile() != null) {
-                                infoList.add(info);
-                            }
-                        }
-                    }
-                } else {
-                    log.warn( "Defined font directory {} is not exist or is not a directory" , fontDirectory );
-                }
-            }
+			for ( File fontDirectory : componentRegistry.getEnvironment().getFontDirectories() ) {
+				if ( !fontDirectory.exists() ) {
+					log.warn( "Defined font directory {} does not exist", fontDirectory );
+					continue;
+				}
+
+				if ( !fontDirectory.isDirectory() ) {
+					log.warn( "Defined font directory {} is not a directory", fontDirectory );
+					continue;
+				}
+
+				final File[] fontDirFiles = fontDirectory.listFiles();
+				if ( fontDirFiles == null ) {
+					log.warn( "File system returned null for listFiles() on defined font directory {}", fontDirectory );
+					continue;
+				}
+
+				for ( File fontFile : fontDirFiles ) {
+					EmbedFontInfo[] infos = fontInfoFinder.find( toURL( fontFile ), fontResolver, fontCache );
+					if ( infos == null || infos.length == 0 ) {
+						continue;
+					}
+					for ( EmbedFontInfo info : infos ) {
+						if ( info.getEmbedFile() != null ) {
+							infoList.add( info );
+						}
+					}
+				}
+			}
 		}
 
 		return infoList;
@@ -225,7 +239,7 @@ public class FopConfigHelper {
 		try {
 			return file.toURI().toURL();
 		}
-		catch ( MalformedURLException ignore ) {
+		catch (MalformedURLException ignore) {
 		}
 		return null;
 	}
@@ -271,12 +285,12 @@ public class FopConfigHelper {
 	private void dumpUserConfigToFile(DefaultConfiguration fopUserConfiguration) {
 		File dumpFile = new File( getFopWorkDirectory(), "generated-user-config.xml" );
 
-		if ( ! dumpFile.exists() ) {
+		if ( !dumpFile.exists() ) {
 			try {
 				//noinspection ResultOfMethodCallIgnored
 				dumpFile.createNewFile();
 			}
-			catch ( IOException e ) {
+			catch (IOException e) {
 				log.error( "Unable to dump generated FOP user config", e );
 			}
 		}
@@ -292,11 +306,11 @@ public class FopConfigHelper {
 					outputStream
 			);
 		}
-		catch ( FileNotFoundException e ) {
+		catch (FileNotFoundException e) {
 			// should never ever happen, see checks above..
 			throw new JDocBookProcessException( "unable to open file for writing generated FOP user-config", e );
 		}
-		catch ( IOException e ) {
+		catch (IOException e) {
 			log.info( "Unable to write generated FOP user-config to file", e );
 		}
 

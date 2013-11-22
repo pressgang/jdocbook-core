@@ -58,6 +58,7 @@ public class XslFoGeneratorImpl implements XslFoGenerator {
 		this.componentRegistry = componentRegistry;
 	}
 
+	@Override
 	public void generateXslFo(RenderingSource source, FormatOptions formatOptions) {
 		final FormatPlan formatPlan = FormatPlanBuilder.buildFormatPlan( formatOptions );
 		final Transformer transformer = buildXslFoTransformer( formatPlan );
