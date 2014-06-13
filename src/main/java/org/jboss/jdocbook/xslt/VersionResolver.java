@@ -109,8 +109,13 @@ public class VersionResolver implements URIResolver {
 
 	private Source resolveLocally(String resourceName) {
 		try {
-			URL resourceURL = componentRegistry.getEnvironment().getResourceDelegate().requireResource( resourceName );
-			return new StreamSource( resourceURL.openStream(), resourceURL.toExternalForm() );
+            URL probableURL1 = componentRegistry.getEnvironment().getResourceDelegate().locateResource( "docbook/" + resourceName );
+            URL probableURL2 = componentRegistry.getEnvironment().getResourceDelegate().locateResource( resourceName );
+            if( probableURL1 == null && probableURL2 == null ){
+                return null;
+            }
+            URL resourceURL = ( probableURL1 != null ? probableURL1 : probableURL2 );
+            return new StreamSource( resourceURL.openStream(), resourceURL.toExternalForm() );
 		}
 		catch ( IllegalArgumentException e ) {
 			return null;
