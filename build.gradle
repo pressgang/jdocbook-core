@@ -23,7 +23,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven-publish-auth'
 
 group = 'org.jboss.jdocbook'
-version = '1.1.1'
+version = '1.1.2-SNAPSHOT'
 
 targetCompatibility = "1.6"
 sourceCompatibility = "1.6"
